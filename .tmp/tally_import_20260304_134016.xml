@@ -1,0 +1,128 @@
+<ENVELOPE>
+  <HEADER>
+    <VERSION>1</VERSION>
+    <TALLYREQUEST>Import</TALLYREQUEST>
+    <TYPE>Data</TYPE>
+    <ID>All Masters</ID>
+  </HEADER>
+  <BODY>
+    <DESC>
+      <STATICVARIABLES>
+        <SVCURRENTCOMPANY>THOTA HOSPITALITY LLP</SVCURRENTCOMPANY>
+      </STATICVARIABLES>
+    </DESC>
+    <DATA>
+      <TALLYMESSAGE>
+
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260201</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>Vegetables from local vendor | Dept: Thota Kitchen | Paid by: Niveditha | Note: No GST bill - write a voucher</NARRATION>
+          <VOUCHERNUMBER>EXL-20260201-R0002</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-425</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>425</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260201</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>Flowers for decoration | Dept: Thota Decor | Paid by: Account | Note: Non-GST flower merchant</NARRATION>
+          <VOUCHERNUMBER>EXL-20260201-R0003</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Decor</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-600</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>600</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260201</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>Staff chicken | Dept: Staff Welfare | Paid by: Niveditha</NARRATION>
+          <VOUCHERNUMBER>EXL-20260201-R0004</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Staff Welfare</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-540</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>540</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Purchase" ACTION="Create">
+          <DATE>20260201</DATE>
+          <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+          <PERSISTEDVIEW>Accounting Voucher View</PERSISTEDVIEW>
+          <ISINVOICE>Yes</ISINVOICE>
+          <PARTYLEDGERNAME>Meat Shop</PARTYLEDGERNAME>
+          <NARRATION>Chicken from Meat Shop | Dept: Thota Kitchen | Paid by: Niveditha | Note: GST invoice available</NARRATION>
+          <REFERENCE>INV-2026-001</REFERENCE>
+          <VOUCHERNUMBER>EXL-20260201-R0005</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-1543</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Meat Shop</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>1543</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Purchase" ACTION="Create">
+          <DATE>20260201</DATE>
+          <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+          <PERSISTEDVIEW>Accounting Voucher View</PERSISTEDVIEW>
+          <ISINVOICE>Yes</ISINVOICE>
+          <PARTYLEDGERNAME>Petrol Bunk</PARTYLEDGERNAME>
+          <NARRATION>Fuel for pickup vehicle | Dept: Logistics | Paid by: Account</NARRATION>
+          <REFERENCE>BILL-456</REFERENCE>
+          <VOUCHERNUMBER>EXL-20260201-R0006</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Fuel Expenses</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-200</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Petrol Bunk</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>200</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Purchase" ACTION="Create">
+          <DATE>20260201</DATE>
+          <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+          <PERSISTEDVIEW>Accounting Voucher View</PERSISTEDVIEW>
+          <ISINVOICE>Yes</ISINVOICE>
+          <PARTYLEDGERNAME>The Big Market</PARTYLEDGERNAME>
+          <NARRATION>Grocery from Big Market | Dept: Thota Kitchen | Paid by: Akshata</NARRATION>
+          <REFERENCE>BM-7890</REFERENCE>
+          <VOUCHERNUMBER>EXL-20260201-R0007</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-2747</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>The Big Market</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>2747</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+      </TALLYMESSAGE>
+    </DATA>
+  </BODY>
+</ENVELOPE>

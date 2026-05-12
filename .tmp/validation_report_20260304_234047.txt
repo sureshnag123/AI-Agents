@@ -1,0 +1,29 @@
+=== Tally Upload Validation Report ===
+Generated: 2026-03-04 23:40:47
+Company: THOTA HOSPITALITY LLP
+
+SUMMARY:
+  Valid entries:   12
+  Errors:          0
+  Warnings:        0
+
+VALID ENTRIES BREAKDOWN:
+  Journal entries:  11
+  Purchase entries: 1
+  Total amount:     ₹6,403.00
+
+VOUCHER DETAILS:
+  Row    Date         Type       Ledger                    Vendor                               Amount
+  ------ ------------ ---------- ------------------------- ------------------------------ ------------
+  2      01-03-2026   Journal    Fuel Expenses             Petrol Bunk                    ₹    200.00
+  3      01-03-2026   Purchase   Thota Kitchen             BLINK COMMERCE PRIVATE LIMITED ₹  1,522.00
+  4      01-03-2026   Journal    Thota Kitchen             VENDOR for Non GST Purchases   ₹    185.00
+  5      01-03-2026   Journal    Thota Kitchen             VENDOR for Non GST Purchases   ₹    710.00
+  6      01-03-2026   Journal    Thota Kitchen             Meat Shop                      ₹    266.00
+  7      01-03-2026   Journal    Staff Welfare             VENDOR for Non GST Purchases   ₹    330.00
+  8      01-03-2026   Journal    Fuel Expenses             Petrol Bunk                    ₹  1,500.00
+  9      01-03-2026   Journal    Thota Decor               Flower Merchant                ₹    220.00
+  10     01-03-2026   Journal    Thota Decor               VENDOR for Non GST Purchases   ₹    100.00
+  11     01-03-2026   Journal    Fuel Expenses             Petrol Bunk                    ₹    200.00
+  12     01-03-2026   Journal    Staff Welfare             VENDOR for Non GST Purchases   ₹    820.00
+  13     01-03-2026   Journal    Staff Welfare             VENDOR for Non GST Purchases   ₹    350.00

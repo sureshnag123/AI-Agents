@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -Command ':*)",
+      "Bash(.venv/Scripts/python -c ' *)",
+      "Bash(ls -lh execution/*.py)",
+      "Bash(grep -l \"purchase\\\\|bill\" *.py)",
+      "Bash(wc -l execution/*.py)",
+      "Bash(Get-ChildItem -Path \"d:\\\\Agents_Suresh\\\\extracted\\\\Odoo-Tally-Sync\" -Recurse -Force)",
+      "Bash(Select-Object -Property FullName, PSIsContainer)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(python push_sales_to_tally.py --from 2026-04-01 --to 2026-05-05)"
+    ]
+  }
+}

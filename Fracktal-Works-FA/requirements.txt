@@ -1,0 +1,10 @@
+# Auto-generated requirements for this agent workspace
+
+anthropic
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+openai
+openpyxl
+python-dotenv
+requests

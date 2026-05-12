@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/__pycache__": true,
+			"**/*.pyc": true
+		},
+		"python.defaultInterpreterPath": "./venv/Scripts/python.exe",
+		"editor.formatOnSave": true
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+			"github.copilot",
+			"github.copilot-chat"
+		]
+	}
+}

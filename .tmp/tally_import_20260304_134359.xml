@@ -1,0 +1,200 @@
+<ENVELOPE>
+  <HEADER>
+    <VERSION>1</VERSION>
+    <TALLYREQUEST>Import</TALLYREQUEST>
+    <TYPE>Data</TYPE>
+    <ID>All Masters</ID>
+  </HEADER>
+  <BODY>
+    <DESC>
+      <STATICVARIABLES>
+        <SVCURRENTCOMPANY>THOTA HOSPITALITY LLP</SVCURRENTCOMPANY>
+      </STATICVARIABLES>
+    </DESC>
+    <DATA>
+      <TALLYMESSAGE>
+
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>Vegetables from local market | Dept: Thota Kitchen | Paid by: Niveditha | Note: No GST bill</NARRATION>
+          <VOUCHERNUMBER>EXL-20260301-R0002</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-580</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>580</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Purchase" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+          <PERSISTEDVIEW>Accounting Voucher View</PERSISTEDVIEW>
+          <ISINVOICE>Yes</ISINVOICE>
+          <PARTYLEDGERNAME>Meat Shop</PARTYLEDGERNAME>
+          <NARRATION>Chicken from Meat Shop | Dept: Thota Kitchen | Paid by: Niveditha | Note: GST invoice available</NARRATION>
+          <REFERENCE>MS-4521</REFERENCE>
+          <VOUCHERNUMBER>EXL-20260301-R0003</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-1650</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Meat Shop</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>1650</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260302</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>Flowers for hall decoration | Dept: Thota Decor | Paid by: Account | Note: Local flower merchant</NARRATION>
+          <VOUCHERNUMBER>EXL-20260302-R0004</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Decor</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-450</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>450</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Purchase" ACTION="Create">
+          <DATE>20260302</DATE>
+          <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+          <PERSISTEDVIEW>Accounting Voucher View</PERSISTEDVIEW>
+          <ISINVOICE>Yes</ISINVOICE>
+          <PARTYLEDGERNAME>Petrol Bunk</PARTYLEDGERNAME>
+          <NARRATION>Pickup vehicle fuel | Dept: Logistics | Paid by: Account</NARRATION>
+          <REFERENCE>PB-7890</REFERENCE>
+          <VOUCHERNUMBER>EXL-20260302-R0005</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Fuel Expenses</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-1500</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Petrol Bunk</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>1500</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Purchase" ACTION="Create">
+          <DATE>20260303</DATE>
+          <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+          <PERSISTEDVIEW>Accounting Voucher View</PERSISTEDVIEW>
+          <ISINVOICE>Yes</ISINVOICE>
+          <PARTYLEDGERNAME>The Big Market</PARTYLEDGERNAME>
+          <NARRATION>Monthly grocery from Big Market | Dept: Thota Kitchen | Paid by: Akshata | Note: Monthly grocery stock</NARRATION>
+          <REFERENCE>BM-2026-312</REFERENCE>
+          <VOUCHERNUMBER>EXL-20260303-R0006</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-2850</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>The Big Market</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>2850</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260303</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>Staff meals - chicken | Dept: Staff Welfare | Paid by: Niveditha | Note: Local non-GST vendor</NARRATION>
+          <VOUCHERNUMBER>EXL-20260303-R0007</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Staff Welfare</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-370</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>370</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260304</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>Eggs and curd from provision store | Dept: Thota Kitchen | Paid by: Niveditha | Note: Manjunath provision store</NARRATION>
+          <VOUCHERNUMBER>EXL-20260304-R0008</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-275</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>275</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Purchase" ACTION="Create">
+          <DATE>20260304</DATE>
+          <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+          <PERSISTEDVIEW>Accounting Voucher View</PERSISTEDVIEW>
+          <ISINVOICE>Yes</ISINVOICE>
+          <PARTYLEDGERNAME>Swiggy Instamart</PARTYLEDGERNAME>
+          <NARRATION>Swiggy Instamart grocery order | Dept: Thota Kitchen | Paid by: Account | Note: Deducted from bank</NARRATION>
+          <REFERENCE>SWG-98765</REFERENCE>
+          <VOUCHERNUMBER>EXL-20260304-R0009</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-1120</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Swiggy Instamart</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>1120</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260305</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>Plumbing repair - kitchen sink | Dept: Maintenance | Paid by: Account | Note: Local plumber - no bill</NARRATION>
+          <VOUCHERNUMBER>EXL-20260305-R0010</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Repairs &amp; Maintenance</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-800</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>800</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Purchase" ACTION="Create">
+          <DATE>20260305</DATE>
+          <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+          <PERSISTEDVIEW>Accounting Voucher View</PERSISTEDVIEW>
+          <ISINVOICE>Yes</ISINVOICE>
+          <PARTYLEDGERNAME>Akshay - Milk</PARTYLEDGERNAME>
+          <NARRATION>Monthly milk bill - Feb | Dept: Thota Kitchen | Paid by: Account | Note: Monthly settlement</NARRATION>
+          <REFERENCE>MILK-FEB26</REFERENCE>
+          <VOUCHERNUMBER>EXL-20260305-R0011</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-3915</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Akshay - Milk</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>3915</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+      </TALLYMESSAGE>
+    </DATA>
+  </BODY>
+</ENVELOPE>

@@ -1,0 +1,35 @@
+# Environment variables and secrets
+.env
+.env.local
+
+# Temporary / intermediate files
+.tmp/
+*.tmp
+*.temp
+
+# Generated output files (keep locally, don't commit)
+outputs/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

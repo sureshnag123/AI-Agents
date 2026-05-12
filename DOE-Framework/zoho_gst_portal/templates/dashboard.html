@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zoho → GST Portal</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #2d3748; min-height: 100vh; }
+
+  /* Top nav */
+  nav { background: #1a365d; color: white; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  nav .brand { font-size: 18px; font-weight: 700; letter-spacing: .5px; }
+  nav .brand span { color: #63b3ed; }
+  nav a { color: #bee3f8; text-decoration: none; font-size: 14px; padding: 6px 14px; border-radius: 6px; transition: background .15s; }
+  nav a:hover { background: #2c5282; }
+
+  /* Page layout */
+  .page { max-width: 860px; margin: 40px auto; padding: 0 20px; }
+
+  /* Alert banners */
+  .alert { padding: 14px 18px; border-radius: 10px; margin-bottom: 24px; font-size: 14px; font-weight: 500; }
+  .alert.success { background: #c6f6d5; color: #22543d; border-left: 4px solid #38a169; }
+  .alert.warning { background: #fefcbf; color: #744210; border-left: 4px solid #d69e2e; }
+  .alert.danger  { background: #fed7d7; color: #822727; border-left: 4px solid #e53e3e; }
+
+  /* Setup banner */
+  .setup-banner { background: #ebf8ff; border: 2px dashed #63b3ed; border-radius: 12px; padding: 28px; text-align: center; margin-bottom: 28px; }
+  .setup-banner h2 { color: #2b6cb0; margin-bottom: 8px; }
+  .setup-banner p  { color: #4a5568; margin-bottom: 18px; font-size: 15px; }
+  .btn-primary { display: inline-block; background: #3182ce; color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; border: none; cursor: pointer; transition: background .15s; }
+  .btn-primary:hover { background: #2c5282; }
+
+  /* Main card */
+  .card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 32px; margin-bottom: 28px; }
+  .card h2 { font-size: 20px; color: #1a365d; margin-bottom: 6px; }
+  .card .sub { color: #718096; font-size: 14px; margin-bottom: 28px; }
+
+  /* Month selector */
+  .month-row { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 13px; font-weight: 600; color: #4a5568; text-transform: uppercase; letter-spacing: .5px; }
+  select { padding: 10px 14px; border: 1.5px solid #cbd5e0; border-radius: 8px; font-size: 15px; background: #f7fafc; color: #2d3748; appearance: none; cursor: pointer; }
+  select:focus { outline: none; border-color: #3182ce; }
+
+  /* Push button */
+  .btn-push { background: #276749; color: white; padding: 12px 36px; border-radius: 8px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; transition: background .15s; letter-spacing: .3px; }
+  .btn-push:hover { background: #22543d; }
+  .btn-push:disabled { background: #a0aec0; cursor: not-allowed; }
+  .btn-download { background: #2b6cb0; color: white; padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: background .15s; }
+  .btn-download:hover { background: #2c5282; }
+
+  /* Info chips */
+  .chips { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+  .chip { background: #edf2f7; border-radius: 20px; padding: 6px 14px; font-size: 13px; color: #4a5568; font-weight: 500; }
+  .chip.green { background: #c6f6d5; color: #22543d; }
+  .chip.blue  { background: #bee3f8; color: #2b6cb0; }
+
+  /* Results table */
+  .results { margin-top: 28px; }
+  .results h3 { font-size: 16px; color: #2d3748; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: #edf2f7; padding: 10px 12px; text-align: left; color: #4a5568; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #2d3748; }
+  tr:hover td { background: #f7fafc; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .badge.success { background: #c6f6d5; color: #22543d; }
+  .badge.error   { background: #fed7d7; color: #822727; }
+
+  /* History section */
+  .history-card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 28px; }
+  .history-card h2 { font-size: 18px; color: #1a365d; margin-bottom: 18px; }
+  .run-item { border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .run-item .label { font-weight: 600; font-size: 15px; }
+  .run-item .meta { color: #718096; font-size: 13px; margin-top: 2px; }
+  .empty { text-align: center; color: #a0aec0; padding: 32px; font-size: 15px; }
+
+  footer { text-align: center; color: #a0aec0; font-size: 12px; padding: 24px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">Zoho Billing <span>→</span> GST Portal</div>
+  <div>
+    <a href="{{ url_for('settings') }}">⚙ Settings</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="alert {{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  {% if not has_settings %}
+  <!-- First-time setup prompt -->
+  <div class="setup-banner">
+    <h2>Welcome! Let's get you set up.</h2>
+    <p>Enter your Zoho and GST credentials once. After that, pushing invoices each month takes just one click.</p>
+    <a href="{{ url_for('settings') }}" class="btn-primary">⚙ Go to Settings</a>
+  </div>
+  {% else %}
+
+  {% if zoho_missing %}
+  <div class="alert warning">
+    <strong>Zoho not connected.</strong>
+    Your Zoho Access Token is missing or expired.
+    <a href="{{ url_for('zoho_authorize') }}" style="margin-left:12px; background:#d69e2e; color:white; padding:6px 16px; border-radius:6px; text-decoration:none; font-weight:600;">🔗 Re-connect Zoho</a>
+  </div>
+  {% endif %}
+
+  <!-- Push invoices card -->
+  <div class="card">
+    <h2>Push Invoices to GST Portal</h2>
+    <p class="sub">Select the month and year, then click <strong>Push Invoices</strong>.</p>
+
+    {% if cfg.get('company_name') %}
+    <div class="chips">
+      <div class="chip blue">🏢 {{ cfg.company_name }}</div>
+      {% if cfg.get('gstin') %}<div class="chip green">GSTIN: {{ cfg.gstin }}</div>{% endif %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('push') }}" id="pushForm">
+      <div class="month-row">
+        <div class="field">
+          <label>Month</label>
+          <select name="month" id="monthSel">
+            {% for num, name in months %}
+              <option value="{{ num }}" {% if num == month %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label>Year</label>
+          <select name="year" id="yearSel">
+            {% for y in years %}
+              <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn-push" id="pushBtn" onclick="return confirmPush()">
+          &#9654; Push to GST Portal
+        </button>
+      </div>
+    </form>
+
+    <form method="POST" action="{{ url_for('download') }}" id="dlForm" style="margin-top:14px;">
+      <input type="hidden" name="month" id="dlMonth" value="{{ month }}">
+      <input type="hidden" name="year"  id="dlYear"  value="{{ year }}">
+      <button type="submit" class="btn-download" onclick="syncDownloadSelectors()">
+        &#11015; Download GSTR-1 JSON (for manual upload)
+      </button>
+    </form>
+    <p style="font-size:12px;color:#718096;margin-top:8px;">
+      <strong>Note:</strong> The GST Portal API requires a registered GSP account.
+      If you don't have GSP API access, use <em>Download</em> to get the data file and upload it manually at
+      <a href="https://www.gst.gov.in" target="_blank">gst.gov.in</a>.
+    </p>
+  </div>
+
+  <!-- History -->
+  <div class="history-card">
+    <h2>Recent Uploads</h2>
+    {% if history %}
+      {% for run in history %}
+      <div class="run-item">
+        <div>
+          <div class="label">{{ run.month }}</div>
+          <div class="meta">{{ run.count }} invoice(s) pushed</div>
+        </div>
+        <span class="badge {{ 'success' if run.status == 'Success' else 'error' }}">
+          {{ run.status }}
+        </span>
+      </div>
+
+      <!-- Invoice detail table -->
+      {% if run.invoices %}
+      <div class="results" style="margin-bottom: 18px;">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Invoice No.</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>GSTIN</th>
+              <th style="text-align:right">Amount (₹)</th>
+              <th style="text-align:right">Tax (₹)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inv in run.invoices %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ inv.invoice_number }}</td>
+              <td>{{ inv.invoice_date }}</td>
+              <td>{{ inv.customer_name }}</td>
+              <td>{{ inv.customer_gstin }}</td>
+              <td style="text-align:right">{{ "%.2f"|format(inv.total_amount|float) }}</td>
+              <td style="text-align:right">{{ "%.2f"|format(inv.tax_amount|float) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="empty">No uploads yet. Push your first month above!</div>
+    {% endif %}
+  </div>
+
+  {% endif %}
+</div>
+
+<footer>Zoho Billing → GST Portal Tool &nbsp;|&nbsp; All data stays on your computer.</footer>
+
+<script>
+function confirmPush() {
+  const month = document.getElementById('monthSel').options[document.getElementById('monthSel').selectedIndex].text;
+  const year  = document.getElementById('yearSel').value;
+  if (!confirm(`Push invoices for ${month} ${year} to the GST Portal?\n\nThis will upload data to the government portal.`)) return false;
+  document.getElementById('pushBtn').textContent = 'Pushing...';
+  document.getElementById('pushBtn').disabled = true;
+  return true;
+}
+function syncDownloadSelectors() {
+  document.getElementById('dlMonth').value = document.getElementById('monthSel').value;
+  document.getElementById('dlYear').value  = document.getElementById('yearSel').value;
+}
+</script>
+</body>
+</html>

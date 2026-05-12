@@ -1,0 +1,7 @@
+pandas>=2.0.0
+openpyxl>=3.1.0
+streamlit>=1.30.0
+# Odoo XML-RPC uses Python's built-in xmlrpc.client — no extra package needed.
+# Optional - for enhanced fuzzy matching (falls back to difflib if not installed):
+# thefuzz>=0.20.0
+# python-Levenshtein>=0.21.0

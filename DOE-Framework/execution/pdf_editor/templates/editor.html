@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Editor – Editing</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            PDF Editor
+        </div>
+        <nav>
+            <a href="/">&#8592; New File</a>
+            <button id="btnSave" title="Apply all edits and download PDF">&#10003; Save &amp; Download PDF</button>
+        </nav>
+    </header>
+
+    <!-- Editor Layout -->
+    <div class="editor-container">
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <button class="tool-btn active" data-tool="select" title="Select / Move items">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+                Select
+            </button>
+            <button class="tool-btn" data-tool="text" title="Add Text annotation">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                Text
+            </button>
+            <button class="tool-btn" data-tool="highlight" title="Add Highlight">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="8" rx="1"/></svg>
+                Highlight
+            </button>
+            <button class="tool-btn" data-tool="rectangle" title="Draw Rectangle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                Rectangle
+            </button>
+            <div class="separator"></div>
+            <button class="tool-btn" data-tool="image" title="Place an uploaded image on the page">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Image
+            </button>
+            <button class="tool-btn" data-tool="signature" title="Place Signature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 19c-1.5 0-3-1-4.5-3s-3-2-4.5-1-3 2-5 2"/><path d="M2 12l5.12-5.12a2 2 0 0 1 2.83 0l1.17 1.17a2 2 0 0 1 0 2.83L6 16"/></svg>
+                Signature
+            </button>
+            <button class="tool-btn" data-tool="attest" title="Attest (Signature + Date + Name stamp)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                Attest
+            </button>
+            <div class="separator"></div>
+            <label style="font-size:12px; display:flex; align-items:center; gap:4px;">
+                Zoom:
+                <select id="zoomSelect" style="padding:3px 6px; border:1px solid var(--border); border-radius:4px; font-size:12px;">
+                    <option value="0.75">75%</option>
+                    <option value="1">100%</option>
+                    <option value="1.5" selected>150%</option>
+                    <option value="2">200%</option>
+                    <option value="3">300%</option>
+                </select>
+            </label>
+            <div class="separator"></div>
+            <span style="font-size:12px; color:var(--text-muted);">
+                Page <strong id="currentPageLabel">1</strong> / <strong id="totalPagesLabel">{{ total_pages }}</strong>
+            </span>
+            <button class="tool-btn" id="btnPrevPage" title="Previous page">&#9664;</button>
+            <button class="tool-btn" id="btnNextPage" title="Next page">&#9654;</button>
+            <div class="separator"></div>
+            <button class="tool-btn danger" id="btnClearPage" title="Clear all edits on this page">Clear Page</button>
+        </div>
+
+        <!-- Left sidebar – Thumbnails -->
+        <div class="sidebar-left">
+            <h3>Pages</h3>
+            <div class="thumb-list" id="thumbList"></div>
+        </div>
+
+        <!-- Main Canvas -->
+        <div class="canvas-area" id="canvasArea">
+            <div class="page-wrapper" id="pageWrapper">
+                <img id="pageImage" class="page-img" src="" alt="Page" draggable="false">
+            </div>
+        </div>
+
+        <!-- Right sidebar – Properties & Signature -->
+        <div class="sidebar-right" id="sidebarRight">
+
+            <!-- Text Properties -->
+            <div class="panel" id="panelTextProps">
+                <div class="panel-header" data-panel="panelTextProps">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                    Text Properties
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="panel-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="propFontSize">Font Size</label>
+                            <input type="number" id="propFontSize" value="14" min="6" max="72">
+                        </div>
+                        <div class="form-group">
+                            <label for="propTextColor">Color</label>
+                            <input type="color" id="propTextColor" value="#000000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="propFontWeight">Font Weight</label>
+                        <select id="propFontWeight">
+                            <option value="normal">Normal</option>
+                            <option value="bold">Bold</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shape Properties -->
+            <div class="panel" id="panelShapeProps">
+                <div class="panel-header" data-panel="panelShapeProps">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                    Shape Properties
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="panel-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="propShapeColor">Color</label>
+                            <input type="color" id="propShapeColor" value="#FFFF00">
+                        </div>
+                        <div class="form-group">
+                            <label for="propShapeOpacity">Opacity (<span id="opacityVal">0.35</span>)</label>
+                            <input type="range" id="propShapeOpacity" min="0.1" max="1" step="0.05" value="0.35">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Upload Panel -->
+            <div class="panel" id="panelImage">
+                <div class="panel-header" data-panel="panelImage">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    Image Upload
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="panel-body">
+                    <p style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">
+                        Upload an image (PNG, JPG, BMP, GIF) to place on the PDF page.
+                    </p>
+                    <div class="sig-actions">
+                        <button class="tool-btn primary" id="btnImageUpload">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Upload Image
+                        </button>
+                        <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" style="display:none;">
+                    </div>
+                    <div id="imagePreview" style="margin-top:10px;"></div>
+                    <div id="imageLibrary" class="sig-library" style="margin-top:10px;">
+                        <div class="empty-state">No images uploaded yet.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signature Panel -->
+            <div class="panel" id="panelSignature">
+                <div class="panel-header" data-panel="panelSignature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 19c-1.5 0-3-1-4.5-3s-3-2-4.5-1-3 2-5 2"/></svg>
+                    Signature Pad
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="panel-body">
+                    <div class="sig-pad-wrapper">
+                        <canvas id="sigCanvas"></canvas>
+                        <span class="sig-pad-label">Draw your signature here</span>
+                    </div>
+                    <div class="sig-actions">
+                        <button class="tool-btn" id="btnSigClear" title="Clear the drawing pad">Clear</button>
+                        <button class="tool-btn primary" id="btnSigSave" title="Save drawn signature to library">Save to Library</button>
+                        <button class="tool-btn" id="btnSigUpload" title="Upload a signature image file">Upload File</button>
+                        <input type="file" id="sigFileInput" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" style="display:none;">
+                    </div>
+                    <div style="margin-top:12px; display:flex; align-items:center; justify-content:space-between;">
+                        <span style="font-size:12px; font-weight:600; color:var(--text-muted);">Saved Signatures</span>
+                        <span id="sigSelectionStatus" class="status-badge none">None selected</span>
+                    </div>
+                    <div class="sig-library" id="sigLibrary">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 19c-1.5 0-3-1-4.5-3s-3-2-4.5-1-3 2-5 2"/></svg>
+                            <div>No saved signatures yet.<br>Draw or upload one above.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attestation Panel -->
+            <div class="panel" id="panelAttest">
+                <div class="panel-header" data-panel="panelAttest">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    Attestation Details
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="attestName">Signatory Name</label>
+                        <input type="text" id="attestName" placeholder="Full Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="attestTitle">Title / Designation</label>
+                        <input type="text" id="attestTitle" placeholder="e.g. Director, Manager">
+                    </div>
+                    <div class="form-group">
+                        <label for="attestDate">Date</label>
+                        <input type="date" id="attestDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="attestText">Attestation Text</label>
+                        <input type="text" id="attestText" value="Verified & Attested" placeholder='e.g. "Verified & Attested"'>
+                    </div>
+                    <p style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+                        1. Select a signature from library<br>
+                        2. Fill in details above<br>
+                        3. Click <strong>Attest</strong> tool in toolbar<br>
+                        4. Click on the page to place stamp
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+    // ==================================================================
+    //  PDF Editor – Client-side Logic  (v2 – all bugs fixed)
+    // ==================================================================
+    (function() {
+        'use strict';
+
+        const FILE_ID = '{{ file_id }}';
+        const TOTAL_PAGES = {{ total_pages }};
+        let currentPage = 0;
+        let currentTool = 'select';
+        let zoomLevel = 1.5;
+        let selectedOverlay = null;
+        let selectedSignatureUrl = null;
+        let selectedSignatureDataUrl = null;
+        let selectedImageUrl = null;
+        let selectedImageDataUrl = null;
+
+        // All edits indexed by page
+        const pageEdits = {};
+
+        // DOM refs
+        const $ = id => document.getElementById(id);
+        const pageImage = $('pageImage');
+        const pageWrapper = $('pageWrapper');
+        const canvasArea = $('canvasArea');
+        const thumbList = $('thumbList');
+        const currentPageLabel = $('currentPageLabel');
+        const totalPagesLabel = $('totalPagesLabel');
+        const loadingOverlay = $('loadingOverlay');
+        const toastContainer = $('toastContainer');
+        const sigCanvas = $('sigCanvas');
+        const sigCtx = sigCanvas.getContext('2d');
+
+        totalPagesLabel.textContent = TOTAL_PAGES;
+
+        // ================================================================
+        // TOAST NOTIFICATIONS
+        // ================================================================
+        function toast(msg, type = 'info') {
+            const t = document.createElement('div');
+            t.className = 'toast ' + type;
+            t.textContent = msg;
+            toastContainer.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3500);
+        }
+        function showLoading() { loadingOverlay.classList.add('active'); }
+        function hideLoading() { loadingOverlay.classList.remove('active'); }
+
+        // ================================================================
+        // PANEL COLLAPSE / EXPAND  (fixes "can't click anything" bug)
+        // ================================================================
+        document.querySelectorAll('.panel-header[data-panel]').forEach(header => {
+            header.addEventListener('click', function(e) {
+                // Don't collapse if clicking on input/button inside header
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+                const panel = this.closest('.panel');
+                panel.classList.toggle('collapsed');
+            });
+        });
+
+        // PREVENT sidebar clicks from propagating to canvas
+        $('sidebarRight').addEventListener('mousedown', e => e.stopPropagation());
+        $('sidebarRight').addEventListener('click', e => e.stopPropagation());
+
+        // ================================================================
+        // TOOL SELECTION
+        // ================================================================
+        document.querySelectorAll('.toolbar [data-tool]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.toolbar [data-tool]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentTool = btn.dataset.tool;
+                pageWrapper.style.cursor = (currentTool === 'select') ? 'default' : 'crosshair';
+            });
+        });
+
+        // ================================================================
+        // ZOOM
+        // ================================================================
+        $('zoomSelect').addEventListener('change', function() {
+            zoomLevel = parseFloat(this.value);
+            loadPage(currentPage);
+        });
+
+        // Opacity label update
+        $('propShapeOpacity').addEventListener('input', function() {
+            $('opacityVal').textContent = this.value;
+        });
+
+        // ================================================================
+        // PAGE NAVIGATION
+        // ================================================================
+        $('btnPrevPage').addEventListener('click', () => { if (currentPage > 0) goToPage(currentPage - 1); });
+        $('btnNextPage').addEventListener('click', () => { if (currentPage < TOTAL_PAGES - 1) goToPage(currentPage + 1); });
+
+        function goToPage(n) {
+            currentPage = n;
+            currentPageLabel.textContent = n + 1;
+            loadPage(n);
+            document.querySelectorAll('.thumb-item').forEach((t, i) => t.classList.toggle('active', i === n));
+        }
+
+        function loadPage(n) {
+            const src = '/api/page/' + FILE_ID + '/' + n + '?zoom=' + zoomLevel + '&_t=' + Date.now();
+            pageImage.src = src;
+            pageImage.onload = function() {
+                pageWrapper.style.width = pageImage.naturalWidth + 'px';
+                pageWrapper.style.height = pageImage.naturalHeight + 'px';
+                renderOverlays();
+            };
+        }
+
+        // ================================================================
+        // THUMBNAILS
+        // ================================================================
+        function loadThumbnails() {
+            thumbList.innerHTML = '';
+            for (let i = 0; i < TOTAL_PAGES; i++) {
+                const div = document.createElement('div');
+                div.className = 'thumb-item' + (i === 0 ? ' active' : '');
+                const img = document.createElement('img');
+                img.src = '/api/page/' + FILE_ID + '/' + i + '?zoom=0.4';
+                img.alt = 'Page ' + (i + 1);
+                img.loading = 'lazy';
+                const lbl = document.createElement('span');
+                lbl.className = 'page-label';
+                lbl.textContent = i + 1;
+                div.appendChild(img);
+                div.appendChild(lbl);
+                div.addEventListener('click', (function(idx) { return function() { goToPage(idx); }; })(i));
+                thumbList.appendChild(div);
+            }
+        }
+
+        // ================================================================
+        // OVERLAY MANAGEMENT
+        // ================================================================
+        function getPageEdits() {
+            if (!pageEdits[currentPage]) pageEdits[currentPage] = [];
+            return pageEdits[currentPage];
+        }
+
+        function renderOverlays() {
+            pageWrapper.querySelectorAll('.overlay-item').forEach(el => el.remove());
+            getPageEdits().forEach(ed => createOverlayElement(ed));
+        }
+
+        function createOverlayElement(edit) {
+            const el = document.createElement('div');
+            el.className = 'overlay-item';
+            el.dataset.editId = edit.id;
+            el.style.left = (edit.x * zoomLevel) + 'px';
+            el.style.top = (edit.y * zoomLevel) + 'px';
+
+            // Delete button
+            const delBtn = document.createElement('button');
+            delBtn.className = 'delete-btn';
+            delBtn.innerHTML = '&times;';
+            delBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                removeEdit(edit.id);
+            });
+            el.appendChild(delBtn);
+
+            if (edit.type === 'text' || edit.type === 'date_stamp') {
+                const txt = document.createElement('div');
+                txt.className = 'overlay-text';
+                txt.contentEditable = 'true';
+                txt.style.fontSize = (edit.fontSize * zoomLevel) + 'px';
+                txt.style.color = edit.colorHex || '#000';
+                txt.style.fontWeight = edit.fontWeight || 'normal';
+                txt.textContent = edit.text;
+                txt.addEventListener('input', function() { edit.text = txt.textContent; });
+                txt.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+                txt.addEventListener('click', function(e) { e.stopPropagation(); });
+                el.appendChild(txt);
+
+            } else if (edit.type === 'signature' || edit.type === 'image') {
+                el.classList.add(edit.type === 'signature' ? 'overlay-signature' : 'overlay-image');
+                const img = document.createElement('img');
+                img.src = edit.displayUrl || edit.signatureUrl || '';
+                img.style.width = (edit.width * zoomLevel) + 'px';
+                img.style.height = (edit.height * zoomLevel) + 'px';
+                img.draggable = false;
+                el.appendChild(img);
+                const handle = document.createElement('div');
+                handle.className = 'resize-handle';
+                handle.addEventListener('mousedown', function(e) { startResize(e, edit, el, img); });
+                el.appendChild(handle);
+
+            } else if (edit.type === 'highlight' || edit.type === 'rectangle') {
+                el.style.width = (edit.width * zoomLevel) + 'px';
+                el.style.height = (edit.height * zoomLevel) + 'px';
+                if (edit.type === 'highlight') {
+                    el.style.background = edit.colorHex || 'rgba(255,255,0,0.35)';
+                    el.style.opacity = edit.opacity || 0.35;
+                } else {
+                    el.style.border = '2px solid ' + (edit.colorHex || '#ff0000');
+                    el.style.background = 'transparent';
+                }
+                const handle = document.createElement('div');
+                handle.className = 'resize-handle';
+                handle.addEventListener('mousedown', function(e) { startResizeShape(e, edit, el); });
+                el.appendChild(handle);
+
+            } else if (edit.type === 'attest') {
+                el.classList.add('overlay-signature');
+                const stamp = document.createElement('div');
+                stamp.className = 'attest-stamp';
+                let html = '<div class="attest-title">' + (edit.attestLabel || 'Verified & Attested') + '</div>';
+                if (edit.displayUrl) html += '<img src="' + edit.displayUrl + '" alt="Signature">';
+                html += '<div><strong>' + (edit.attestName || '') + '</strong></div>';
+                if (edit.attestDesignation) html += '<div>' + edit.attestDesignation + '</div>';
+                html += '<div>' + (edit.attestDate || '') + '</div>';
+                stamp.innerHTML = html;
+                el.appendChild(stamp);
+                const handle = document.createElement('div');
+                handle.className = 'resize-handle';
+                el.appendChild(handle);
+            }
+
+            // Make draggable
+            makeDraggable(el, edit);
+
+            // Select on click
+            el.addEventListener('mousedown', function(e) {
+                selectOverlay(el, edit);
+            });
+
+            pageWrapper.appendChild(el);
+        }
+
+        function selectOverlay(el, edit) {
+            deselectAll();
+            el.classList.add('selected');
+            selectedOverlay = { el: el, edit: edit };
+        }
+        function deselectAll() {
+            pageWrapper.querySelectorAll('.overlay-item.selected').forEach(function(e) { e.classList.remove('selected'); });
+            selectedOverlay = null;
+        }
+        function removeEdit(id) {
+            const edits = getPageEdits();
+            const idx = edits.findIndex(function(e) { return e.id === id; });
+            if (idx !== -1) edits.splice(idx, 1);
+            renderOverlays();
+        }
+
+        // ================================================================
+        // DRAGGING
+        // ================================================================
+        function makeDraggable(el, edit) {
+            let startX, startY, origX, origY, dragging = false;
+
+            el.addEventListener('mousedown', function(e) {
+                if (e.target.classList.contains('resize-handle')) return;
+                if (e.target.classList.contains('delete-btn')) return;
+                if (e.target.isContentEditable) return;
+                e.preventDefault();
+                e.stopPropagation();
+                dragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                origX = parseFloat(el.style.left) || 0;
+                origY = parseFloat(el.style.top) || 0;
+
+                function onMove(ev) {
+                    if (!dragging) return;
+                    el.style.left = (origX + ev.clientX - startX) + 'px';
+                    el.style.top = (origY + ev.clientY - startY) + 'px';
+                }
+                function onUp() {
+                    dragging = false;
+                    document.removeEventListener('mousemove', onMove);
+                    document.removeEventListener('mouseup', onUp);
+                    edit.x = parseFloat(el.style.left) / zoomLevel;
+                    edit.y = parseFloat(el.style.top) / zoomLevel;
+                }
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onUp);
+            });
+        }
+
+        // ================================================================
+        // RESIZING
+        // ================================================================
+        function startResize(e, edit, el, img) {
+            e.preventDefault();
+            e.stopPropagation();
+            const startX = e.clientX;
+            const origW = img.offsetWidth, origH = img.offsetHeight;
+            const aspect = origW / (origH || 1);
+
+            function onMove(ev) {
+                let newW = Math.max(30, origW + ev.clientX - startX);
+                img.style.width = newW + 'px';
+                img.style.height = (newW / aspect) + 'px';
+            }
+            function onUp() {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+                edit.width = parseFloat(img.style.width) / zoomLevel;
+                edit.height = parseFloat(img.style.height) / zoomLevel;
+            }
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        }
+
+        function startResizeShape(e, edit, el) {
+            e.preventDefault();
+            e.stopPropagation();
+            const startX = e.clientX, startY = e.clientY;
+            const origW = el.offsetWidth, origH = el.offsetHeight;
+
+            function onMove(ev) {
+                el.style.width = Math.max(10, origW + ev.clientX - startX) + 'px';
+                el.style.height = Math.max(10, origH + ev.clientY - startY) + 'px';
+            }
+            function onUp() {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+                edit.width = parseFloat(el.style.width) / zoomLevel;
+                edit.height = parseFloat(el.style.height) / zoomLevel;
+            }
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        }
+
+        // ================================================================
+        // CLICK ON CANVAS → ADD ITEMS
+        // ================================================================
+        pageWrapper.addEventListener('click', function(e) {
+            if (e.target.closest('.overlay-item')) return;
+            if (currentTool === 'select') { deselectAll(); return; }
+
+            const rect = pageWrapper.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / zoomLevel;
+            const y = (e.clientY - rect.top) / zoomLevel;
+
+            if (currentTool === 'text') {
+                var ed = {
+                    id: uid(), type: 'text', x: x, y: y,
+                    text: 'Type here…',
+                    fontSize: parseInt($('propFontSize').value) || 14,
+                    colorHex: $('propTextColor').value,
+                    fontWeight: $('propFontWeight').value,
+                    color: hexToRgb01($('propTextColor').value),
+                };
+                getPageEdits().push(ed);
+                renderOverlays();
+            }
+            else if (currentTool === 'highlight') {
+                var c = $('propShapeColor').value;
+                var o = parseFloat($('propShapeOpacity').value);
+                var ed = {
+                    id: uid(), type: 'highlight', x: x, y: y,
+                    width: 200, height: 20,
+                    colorHex: c, opacity: o, color: hexToRgb01(c),
+                };
+                getPageEdits().push(ed);
+                renderOverlays();
+            }
+            else if (currentTool === 'rectangle') {
+                var c = $('propShapeColor').value;
+                var ed = {
+                    id: uid(), type: 'rectangle', x: x, y: y,
+                    width: 120, height: 60,
+                    colorHex: c, color: hexToRgb01(c),
+                };
+                getPageEdits().push(ed);
+                renderOverlays();
+            }
+            else if (currentTool === 'image') {
+                if (!selectedImageUrl) {
+                    toast('Please upload an image first (right panel → Image Upload).', 'error');
+                    return;
+                }
+                var ed = {
+                    id: uid(), type: 'image', x: x, y: y,
+                    width: 150, height: 100,
+                    displayUrl: selectedImageUrl,
+                    imageData: selectedImageDataUrl,
+                };
+                getPageEdits().push(ed);
+                renderOverlays();
+                toast('Image placed. Drag to move, resize with corner handle.', 'success');
+            }
+            else if (currentTool === 'signature') {
+                if (!selectedSignatureUrl) {
+                    toast('Select a signature from the library first (right panel).', 'error');
+                    return;
+                }
+                var ed = {
+                    id: uid(), type: 'signature', x: x, y: y,
+                    width: 150, height: 50,
+                    displayUrl: selectedSignatureUrl,
+                    signatureUrl: selectedSignatureUrl,
+                    signatureData: selectedSignatureDataUrl || selectedSignatureUrl,
+                };
+                getPageEdits().push(ed);
+                renderOverlays();
+                toast('Signature placed!', 'success');
+            }
+            else if (currentTool === 'attest') {
+                if (!selectedSignatureUrl) {
+                    toast('Select a signature from the library first (right panel).', 'error');
+                    return;
+                }
+                var name = $('attestName').value || '';
+                var title = $('attestTitle').value || '';
+                var date = $('attestDate').value || new Date().toISOString().slice(0, 10);
+                var label = $('attestText').value || 'Verified & Attested';
+
+                var ed = {
+                    id: uid(), type: 'attest', x: x, y: y,
+                    width: 200, height: 100,
+                    displayUrl: selectedSignatureUrl,
+                    signatureUrl: selectedSignatureUrl,
+                    signatureData: selectedSignatureDataUrl || selectedSignatureUrl,
+                    attestName: name,
+                    attestDesignation: title,
+                    attestDate: date,
+                    attestLabel: label,
+                };
+                getPageEdits().push(ed);
+                renderOverlays();
+                toast('Attestation stamp placed!', 'success');
+            }
+        });
+
+        // Delete key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Delete' && selectedOverlay && !e.target.isContentEditable) {
+                removeEdit(selectedOverlay.edit.id);
+            }
+        });
+
+        // Clear page
+        $('btnClearPage').addEventListener('click', function() {
+            pageEdits[currentPage] = [];
+            renderOverlays();
+            toast('Page cleared.');
+        });
+
+        // ================================================================
+        // SIGNATURE PAD  (fixed: proper DPI scaling, reliable drawing)
+        // ================================================================
+        let sigDrawing = false;
+        let sigPadInitialized = false;
+
+        function initSigPad() {
+            const wrapper = sigCanvas.parentElement;
+            const w = wrapper.clientWidth;
+            if (w < 10) {
+                // Sidebar not rendered yet; retry
+                setTimeout(initSigPad, 300);
+                return;
+            }
+            const dpr = window.devicePixelRatio || 1;
+            sigCanvas.width = w * dpr;
+            sigCanvas.height = 130 * dpr;
+            sigCanvas.style.width = w + 'px';
+            sigCanvas.style.height = '130px';
+            sigCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            sigCtx.strokeStyle = '#1e293b';
+            sigCtx.lineWidth = 2.5;
+            sigCtx.lineCap = 'round';
+            sigCtx.lineJoin = 'round';
+            sigPadInitialized = true;
+        }
+
+        function sigCoords(e) {
+            const r = sigCanvas.getBoundingClientRect();
+            return { x: e.clientX - r.left, y: e.clientY - r.top };
+        }
+
+        sigCanvas.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            sigDrawing = true;
+            const p = sigCoords(e);
+            sigCtx.beginPath();
+            sigCtx.moveTo(p.x, p.y);
+        });
+        sigCanvas.addEventListener('mousemove', function(e) {
+            if (!sigDrawing) return;
+            e.preventDefault();
+            const p = sigCoords(e);
+            sigCtx.lineTo(p.x, p.y);
+            sigCtx.stroke();
+        });
+        sigCanvas.addEventListener('mouseup', function() { sigDrawing = false; });
+        sigCanvas.addEventListener('mouseleave', function() { sigDrawing = false; });
+
+        // Touch support
+        sigCanvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            sigDrawing = true;
+            const t = e.touches[0];
+            const p = sigCoords(t);
+            sigCtx.beginPath();
+            sigCtx.moveTo(p.x, p.y);
+        }, { passive: false });
+        sigCanvas.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            if (!sigDrawing) return;
+            const t = e.touches[0];
+            const p = sigCoords(t);
+            sigCtx.lineTo(p.x, p.y);
+            sigCtx.stroke();
+        }, { passive: false });
+        sigCanvas.addEventListener('touchend', function() { sigDrawing = false; });
+
+        // Clear button
+        $('btnSigClear').addEventListener('click', function(e) {
+            e.stopPropagation();
+            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            toast('Signature pad cleared.');
+        });
+
+        // Save drawn signature
+        $('btnSigSave').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (isCanvasBlank()) {
+                toast('Please draw a signature first.', 'error');
+                return;
+            }
+            const dataUrl = sigCanvas.toDataURL('image/png');
+            fetch('/api/save-signature', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dataUrl: dataUrl, name: 'Drawn Signature' })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.error) { toast(data.error, 'error'); return; }
+                toast('Signature saved to library!', 'success');
+                sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+                loadSignatureLibrary();
+            })
+            .catch(function() { toast('Failed to save signature.', 'error'); });
+        });
+
+        // Upload signature file
+        $('btnSigUpload').addEventListener('click', function(e) {
+            e.stopPropagation();
+            $('sigFileInput').click();
+        });
+        $('sigFileInput').addEventListener('change', function() {
+            var file = this.files[0];
+            if (!file) return;
+            var fd = new FormData();
+            fd.append('image', file);
+            fetch('/api/save-signature', { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.error) { toast(data.error, 'error'); return; }
+                toast('Signature uploaded!', 'success');
+                loadSignatureLibrary();
+            })
+            .catch(function() { toast('Upload failed.', 'error'); });
+            this.value = ''; // reset so same file can be re-uploaded
+        });
+
+        function isCanvasBlank() {
+            var px = sigCtx.getImageData(0, 0, sigCanvas.width, sigCanvas.height).data;
+            for (var i = 3; i < px.length; i += 4) { if (px[i] !== 0) return false; }
+            return true;
+        }
+
+        // ================================================================
+        // SIGNATURE LIBRARY  (fixed: proper selection, download, delete)
+        // ================================================================
+        function loadSignatureLibrary() {
+            var lib = $('sigLibrary');
+            fetch('/api/signatures')
+            .then(function(r) { return r.json(); })
+            .then(function(sigs) {
+                if (!sigs.length) {
+                    lib.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 19c-1.5 0-3-1-4.5-3s-3-2-4.5-1-3 2-5 2"/></svg><div>No saved signatures yet.<br>Draw or upload one above.</div></div>';
+                    updateSigStatus();
+                    return;
+                }
+                lib.innerHTML = '';
+                sigs.forEach(function(s) {
+                    var item = document.createElement('div');
+                    item.className = 'sig-lib-item';
+                    item.dataset.sigId = s.id;
+                    item.dataset.sigUrl = s.url;
+
+                    // Check if this is the currently selected one
+                    if (selectedSignatureDataUrl === s.id) {
+                        item.classList.add('selected');
+                    }
+
+                    var img = document.createElement('img');
+                    img.src = s.url;
+                    img.alt = 'Signature';
+                    img.draggable = false;
+
+                    var info = document.createElement('div');
+                    info.className = 'sig-info';
+                    var nameSpan = document.createElement('span');
+                    nameSpan.className = 'sig-name';
+                    nameSpan.textContent = s.filename;
+                    var hint = document.createElement('span');
+                    hint.className = 'sig-hint';
+                    hint.textContent = 'Click to select';
+                    info.appendChild(nameSpan);
+                    info.appendChild(hint);
+
+                    var actions = document.createElement('div');
+                    actions.className = 'sig-lib-actions';
+
+                    var dlBtn = document.createElement('button');
+                    dlBtn.className = 'sig-download';
+                    dlBtn.title = 'Download signature image';
+                    dlBtn.innerHTML = '&#8681;';
+                    dlBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        // Download the signature image
+                        var a = document.createElement('a');
+                        a.href = s.url;
+                        a.download = s.filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        toast('Downloading ' + s.filename);
+                    });
+
+                    var delBtnSig = document.createElement('button');
+                    delBtnSig.className = 'sig-del';
+                    delBtnSig.title = 'Delete signature';
+                    delBtnSig.innerHTML = '&times;';
+                    delBtnSig.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        fetch('/api/delete-signature/' + s.id, { method: 'DELETE' })
+                        .then(function() {
+                            if (selectedSignatureDataUrl === s.id) {
+                                selectedSignatureUrl = null;
+                                selectedSignatureDataUrl = null;
+                            }
+                            toast('Signature deleted.');
+                            loadSignatureLibrary();
+                        });
+                    });
+
+                    actions.appendChild(dlBtn);
+                    actions.appendChild(delBtnSig);
+
+                    item.appendChild(img);
+                    item.appendChild(info);
+                    item.appendChild(actions);
+
+                    // Click to SELECT this signature
+                    item.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        // Deselect all
+                        lib.querySelectorAll('.sig-lib-item').forEach(function(it) { it.classList.remove('selected'); });
+                        // Select this one
+                        item.classList.add('selected');
+                        selectedSignatureUrl = s.url;
+                        selectedSignatureDataUrl = s.id;
+                        updateSigStatus();
+                        toast('Signature selected! Now use Signature or Attest tool on the page.', 'success');
+                    });
+
+                    lib.appendChild(item);
+                });
+                updateSigStatus();
+            })
+            .catch(function() {
+                lib.innerHTML = '<div class="empty-state" style="color:#ef4444;">Failed to load signatures.</div>';
+            });
+        }
+
+        function updateSigStatus() {
+            var badge = $('sigSelectionStatus');
+            if (selectedSignatureDataUrl) {
+                badge.className = 'status-badge active';
+                badge.textContent = 'Selected ✓';
+            } else {
+                badge.className = 'status-badge none';
+                badge.textContent = 'None selected';
+            }
+        }
+
+        // ================================================================
+        // IMAGE UPLOAD & LIBRARY  (new feature)
+        // ================================================================
+        $('btnImageUpload').addEventListener('click', function(e) {
+            e.stopPropagation();
+            $('imageFileInput').click();
+        });
+
+        $('imageFileInput').addEventListener('change', function() {
+            var file = this.files[0];
+            if (!file) return;
+            var fd = new FormData();
+            fd.append('image', file);
+            fetch('/api/upload-image', { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.error) { toast(data.error, 'error'); return; }
+                toast('Image uploaded! Click on page to place it.', 'success');
+                selectedImageUrl = data.url;
+                selectedImageDataUrl = data.image_id;
+                loadImageLibrary();
+                // Auto-switch to image tool
+                document.querySelectorAll('.toolbar [data-tool]').forEach(function(b) { b.classList.remove('active'); });
+                document.querySelector('[data-tool="image"]').classList.add('active');
+                currentTool = 'image';
+                pageWrapper.style.cursor = 'crosshair';
+            })
+            .catch(function() { toast('Image upload failed.', 'error'); });
+            this.value = '';
+        });
+
+        function loadImageLibrary() {
+            var lib = $('imageLibrary');
+            fetch('/api/images')
+            .then(function(r) { return r.json(); })
+            .then(function(imgs) {
+                if (!imgs.length) {
+                    lib.innerHTML = '<div class="empty-state">No images uploaded yet.</div>';
+                    return;
+                }
+                lib.innerHTML = '';
+                imgs.forEach(function(img) {
+                    var item = document.createElement('div');
+                    item.className = 'sig-lib-item' + (selectedImageDataUrl === img.id ? ' selected' : '');
+
+                    var imgEl = document.createElement('img');
+                    imgEl.src = img.url;
+                    imgEl.alt = 'Image';
+                    imgEl.draggable = false;
+
+                    var info = document.createElement('div');
+                    info.className = 'sig-info';
+                    var nameSpan = document.createElement('span');
+                    nameSpan.className = 'sig-name';
+                    nameSpan.textContent = img.filename;
+                    var hint = document.createElement('span');
+                    hint.className = 'sig-hint';
+                    hint.textContent = 'Click to select';
+                    info.appendChild(nameSpan);
+                    info.appendChild(hint);
+
+                    var actions = document.createElement('div');
+                    actions.className = 'sig-lib-actions';
+
+                    var dlBtn = document.createElement('button');
+                    dlBtn.className = 'sig-download';
+                    dlBtn.title = 'Download image';
+                    dlBtn.innerHTML = '&#8681;';
+                    dlBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        var a = document.createElement('a');
+                        a.href = img.url;
+                        a.download = img.filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    });
+
+                    var delBtn = document.createElement('button');
+                    delBtn.className = 'sig-del';
+                    delBtn.title = 'Delete image';
+                    delBtn.innerHTML = '&times;';
+                    delBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        fetch('/api/delete-image/' + img.id, { method: 'DELETE' })
+                        .then(function() {
+                            if (selectedImageDataUrl === img.id) {
+                                selectedImageUrl = null;
+                                selectedImageDataUrl = null;
+                            }
+                            loadImageLibrary();
+                            toast('Image deleted.');
+                        });
+                    });
+
+                    actions.appendChild(dlBtn);
+                    actions.appendChild(delBtn);
+                    item.appendChild(imgEl);
+                    item.appendChild(info);
+                    item.appendChild(actions);
+
+                    item.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        lib.querySelectorAll('.sig-lib-item').forEach(function(it) { it.classList.remove('selected'); });
+                        item.classList.add('selected');
+                        selectedImageUrl = img.url;
+                        selectedImageDataUrl = img.id;
+                        toast('Image selected! Use the Image tool to place it on the page.', 'success');
+                    });
+
+                    lib.appendChild(item);
+                });
+            })
+            .catch(function() {
+                lib.innerHTML = '<div class="empty-state" style="color:#ef4444;">Failed to load images.</div>';
+            });
+        }
+
+        // ================================================================
+        // SAVE & DOWNLOAD PDF
+        // ================================================================
+        $('btnSave').addEventListener('click', function() {
+            var allEdits = [];
+            for (var page in pageEdits) {
+                var edits = pageEdits[page];
+                var pageNum = parseInt(page);
+                for (var i = 0; i < edits.length; i++) {
+                    var ed = edits[i];
+                    if (ed.type === 'text') {
+                        allEdits.push({
+                            page: pageNum, type: 'text',
+                            x: ed.x, y: ed.y,
+                            text: ed.text,
+                            fontSize: ed.fontSize,
+                            color: ed.color || [0, 0, 0],
+                        });
+                    } else if (ed.type === 'date_stamp') {
+                        allEdits.push({
+                            page: pageNum, type: 'date_stamp',
+                            x: ed.x, y: ed.y,
+                            text: ed.text,
+                            fontSize: ed.fontSize || 10,
+                            color: ed.color || [0, 0, 0],
+                        });
+                    } else if (ed.type === 'signature') {
+                        allEdits.push({
+                            page: pageNum, type: 'signature',
+                            x: ed.x, y: ed.y,
+                            width: ed.width, height: ed.height,
+                            signatureData: ed.signatureData,
+                        });
+                    } else if (ed.type === 'image') {
+                        allEdits.push({
+                            page: pageNum, type: 'image',
+                            x: ed.x, y: ed.y,
+                            width: ed.width, height: ed.height,
+                            imageData: ed.imageData,
+                        });
+                    } else if (ed.type === 'highlight') {
+                        allEdits.push({
+                            page: pageNum, type: 'highlight',
+                            x: ed.x, y: ed.y,
+                            width: ed.width, height: ed.height,
+                            color: ed.color || [1, 1, 0],
+                            opacity: ed.opacity || 0.35,
+                        });
+                    } else if (ed.type === 'rectangle') {
+                        allEdits.push({
+                            page: pageNum, type: 'rectangle',
+                            x: ed.x, y: ed.y,
+                            width: ed.width, height: ed.height,
+                            color: ed.color || [1, 0, 0],
+                        });
+                    } else if (ed.type === 'attest') {
+                        // Decompose attestation into components
+                        allEdits.push({
+                            page: pageNum, type: 'signature',
+                            x: ed.x + 5, y: ed.y + 20,
+                            width: 120, height: 40,
+                            signatureData: ed.signatureData,
+                        });
+                        allEdits.push({
+                            page: pageNum, type: 'text',
+                            x: ed.x + 5, y: ed.y + 5,
+                            text: ed.attestLabel || 'Verified & Attested',
+                            fontSize: 10, color: [0, 0, 0.7],
+                        });
+                        if (ed.attestName) {
+                            allEdits.push({
+                                page: pageNum, type: 'text',
+                                x: ed.x + 5, y: ed.y + 65,
+                                text: ed.attestName,
+                                fontSize: 10, color: [0, 0, 0],
+                            });
+                        }
+                        if (ed.attestDesignation) {
+                            allEdits.push({
+                                page: pageNum, type: 'text',
+                                x: ed.x + 5, y: ed.y + 78,
+                                text: ed.attestDesignation,
+                                fontSize: 8, color: [0.3, 0.3, 0.3],
+                            });
+                        }
+                        if (ed.attestDate) {
+                            allEdits.push({
+                                page: pageNum, type: 'date_stamp',
+                                x: ed.x + 5, y: ed.y + 90,
+                                text: 'Date: ' + ed.attestDate,
+                                fontSize: 8, color: [0.3, 0.3, 0.3],
+                            });
+                        }
+                    }
+                }
+            }
+
+            if (!allEdits.length) {
+                toast('No edits to save. Add annotations first.', 'error');
+                return;
+            }
+
+            showLoading();
+            fetch('/api/apply-edits', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ file_id: FILE_ID, edits: allEdits }),
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                hideLoading();
+                if (data.error) { toast(data.error, 'error'); return; }
+                // Trigger download
+                var a = document.createElement('a');
+                a.href = data.download_url;
+                a.download = 'edited.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                toast('PDF saved! Download started.', 'success');
+            })
+            .catch(function() {
+                hideLoading();
+                toast('Failed to save PDF.', 'error');
+            });
+        });
+
+        // ================================================================
+        // UTILITIES
+        // ================================================================
+        function uid() { return Math.random().toString(36).substr(2, 9); }
+        function hexToRgb01(hex) {
+            return [
+                parseInt(hex.slice(1, 3), 16) / 255,
+                parseInt(hex.slice(3, 5), 16) / 255,
+                parseInt(hex.slice(5, 7), 16) / 255,
+            ];
+        }
+
+        // Set default date
+        $('attestDate').value = new Date().toISOString().slice(0, 10);
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        loadThumbnails();
+        loadPage(0);
+        loadSignatureLibrary();
+        loadImageLibrary();
+
+        // Initialize signature pad after layout settles
+        requestAnimationFrame(function() {
+            setTimeout(initSigPad, 100);
+        });
+        window.addEventListener('resize', function() {
+            sigPadInitialized = false;
+            initSigPad();
+        });
+
+    })();
+    </script>
+</body>
+</html>

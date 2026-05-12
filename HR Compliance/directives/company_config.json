@@ -1,0 +1,17 @@
+{
+  "company_name": "FRACKTAL WORKS PRIVATE LIMITED",
+  "state": "Karnataka",
+  "epfo_establishment_id": "PYKRP1426103000",
+  "esic_employer_code": "49000552030001099",
+  "pt_registration_no": "356662288",
+  "payroll_file": "C:/Users/User/Downloads/Payroll25-26_March26.xlsx",
+  "compliance_deadlines": {
+    "epfo_actual": "15th of following month",
+    "esic_actual": "15th of following month",
+    "pt_actual": "20th of following month",
+    "epfo_target": "14th of following month",
+    "esic_target": "14th of following month",
+    "pt_target": "19th of following month",
+    "note": "Complete 1 day before actual deadline to avoid last-minute rush"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "_comment": "Employees not enrolled in EPS (Employees' Pension Scheme). For these employees, EPS_WAGES=0 and EPS_CONT_ER=0 in ECR. Reasons: joined after age 58, crossed wage ceiling and opted out, or EPFO-flagged. Confirm each entry with your CA / EPFO.",
+  "GURUPRASAD CD": {
+    "uan": "102205396062",
+    "reason": "EPFO portal flagged UAN as non-EPS member (RFE-21 error on line 15, March 2026)"
+  }
+}

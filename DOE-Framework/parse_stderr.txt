@@ -1,0 +1,12 @@
+[OK] Applied PAN overrides to 1 employee(s)
+
+[WARN] VALIDATION WARNINGS:
+  [ESI] Lakshmipathy: ESI insurance number missing — required for ESIC portal
+
+
+[OK] Written to .tmp/payroll_Salary_Sheet_Mar.json
+  Total employees: 28
+  regular: 18
+  director: 2
+  intern: 6
+  professional_service: 2

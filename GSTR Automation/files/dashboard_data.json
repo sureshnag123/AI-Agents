@@ -1,0 +1,409 @@
+{
+  "generated_at": "2026-03-13T05:05:36.726690",
+  "period": "Q1 FY 2025-26 (Jan\u2013Mar 2025)",
+  "gstr1_summary": {
+    "Total Invoices": 504,
+    "B2B Invoices": 371,
+    "B2C Large": 75,
+    "B2C Small": 30,
+    "Credit/Debit Notes": 13,
+    "Exports": 15,
+    "Duplicates Detected": 4,
+    "Invalid GSTINs": 3,
+    "Missing HSN Codes": 1,
+    "Tax Mismatches": 0,
+    "OCR Errors Flagged": 1,
+    "Total Taxable Value": 160016286.72,
+    "Total IGST": 26372531.55,
+    "Total CGST": "0",
+    "Total SGST": "0",
+    "Total Invoice Value": 186388818.27,
+    "GST Liability (IGST)": 26372531.55,
+    "GST Liability (CGST+SGST)": "0"
+  },
+  "recon_summary": {
+    "Total in Books": 403,
+    "Total in GSTR-2B": 359,
+    "Perfectly Matched": 301,
+    "Value/Tax Mismatches": 30,
+    "In Books, Missing in 2B": 69,
+    "In 2B, Missing in Books": 25,
+    "Duplicate Invoices": 6,
+    "Match Rate (%)": 90.9
+  },
+  "itc_summary": {
+    "Total ITC as per Books": 13198816.89,
+    "Total ITC as per GSTR-2B": 11339795.9,
+    "Eligible ITC": 10007412.88,
+    "Ineligible ITC (2B)": 1332383.02,
+    "Blocked ITC (Sec 17(5))": 795694.39,
+    "Reverse Charge ITC": 392269.47,
+    "ITC Not in 2B": 2285812.01,
+    "Tax Mismatch Impact": 13493.71,
+    "Net ITC Difference": 3191404.01,
+    "Claimable ITC": 9211718.49,
+    "Vendors Not Filed Count": 23
+  },
+  "alerts": [
+    {
+      "Severity": "CRITICAL",
+      "Category": "GSTR-1",
+      "Alert": "4 duplicate invoices detected",
+      "Action": "Remove duplicates before filing GSTR-1",
+      "Impact": "Filing rejection risk"
+    },
+    {
+      "Severity": "HIGH",
+      "Category": "GSTR-1",
+      "Alert": "3 invalid GSTIN(s) in sales register",
+      "Action": "Correct GSTINs in Odoo before filing",
+      "Impact": "Invoice rejection on portal"
+    },
+    {
+      "Severity": "MEDIUM",
+      "Category": "GSTR-1",
+      "Alert": "1 invoices missing HSN code",
+      "Action": "Update HSN codes in Odoo product master",
+      "Impact": "HSN summary will be incomplete"
+    },
+    {
+      "Severity": "MEDIUM",
+      "Category": "GSTR-1",
+      "Alert": "1 possible OCR errors in GSTIN",
+      "Action": "Verify flagged GSTINs against original documents",
+      "Impact": "Incorrect B2B reporting"
+    },
+    {
+      "Severity": "CRITICAL",
+      "Category": "Reconciliation",
+      "Alert": "69 purchase invoices missing from GSTR-2B",
+      "Action": "Contact vendors to file their GSTR-1",
+      "Impact": "\u20b92,285,812 ITC at risk"
+    },
+    {
+      "Severity": "HIGH",
+      "Category": "Reconciliation",
+      "Alert": "30 invoices have value/tax differences",
+      "Action": "Reconcile with vendor invoices and amend",
+      "Impact": "\u20b913,494 tax difference"
+    },
+    {
+      "Severity": "HIGH",
+      "Category": "Reconciliation",
+      "Alert": "25 invoices in 2B not recorded in books",
+      "Action": "Verify and book valid invoices in Odoo",
+      "Impact": "Potential unclaimed ITC"
+    },
+    {
+      "Severity": "HIGH",
+      "Category": "Reconciliation",
+      "Alert": "6 duplicate purchase invoices detected",
+      "Action": "Remove duplicate entries from purchase register",
+      "Impact": "ITC overclaim risk"
+    },
+    {
+      "Severity": "CRITICAL",
+      "Category": "ITC",
+      "Alert": "23 vendors have not filed GSTR-1",
+      "Action": "Send reminder to non-compliant vendors",
+      "Impact": "ITC will be blocked/reversed"
+    },
+    {
+      "Severity": "MEDIUM",
+      "Category": "ITC",
+      "Alert": "\u20b9795,694 blocked under Section 17(5)",
+      "Action": "Review blocked items \u2014 ensure correct classification",
+      "Impact": "Non-claimable ITC"
+    },
+    {
+      "Severity": "CRITICAL",
+      "Category": "ITC",
+      "Alert": "Net ITC difference of \u20b93,191,404",
+      "Action": "Resolve all mismatches before filing GSTR-3B",
+      "Impact": "Incorrect ITC claim in 3B"
+    }
+  ],
+  "monthly": [
+    {
+      "Month": "2025-01",
+      "Invoices": 164,
+      "Taxable": 53179671.5,
+      "IGST": 8616262.12,
+      "CGST": 0,
+      "SGST": 0,
+      "Total": 61795933.62
+    },
+    {
+      "Month": "2025-02",
+      "Invoices": 160,
+      "Taxable": 50484723.7,
+      "IGST": 8304094.02,
+      "CGST": 0,
+      "SGST": 0,
+      "Total": 58788817.72
+    },
+    {
+      "Month": "2025-03",
+      "Invoices": 180,
+      "Taxable": 56351891.52,
+      "IGST": 9452175.41,
+      "CGST": 0,
+      "SGST": 0,
+      "Total": 65804066.93
+    }
+  ],
+  "hsn_summary": [
+    {
+      "HSN Code": "",
+      "Tax Rate": 18,
+      "Count": 1,
+      "Taxable_Value": 593514.18,
+      "IGST": 106832.55,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 700346.73
+    },
+    {
+      "HSN Code": "3004",
+      "Tax Rate": 12,
+      "Count": 33,
+      "Taxable_Value": 10537586.74,
+      "IGST": 1264510.43,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 11802097.17
+    },
+    {
+      "HSN Code": "3808",
+      "Tax Rate": 18,
+      "Count": 32,
+      "Taxable_Value": 9757406.05,
+      "IGST": 1756333.09,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 11513739.14
+    },
+    {
+      "HSN Code": "3926",
+      "Tax Rate": 18,
+      "Count": 33,
+      "Taxable_Value": 10032072.61,
+      "IGST": 1805773.06,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 11837845.67
+    },
+    {
+      "HSN Code": "4820",
+      "Tax Rate": 12,
+      "Count": 42,
+      "Taxable_Value": 14123690.63,
+      "IGST": 1694842.87,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 15818533.5
+    },
+    {
+      "HSN Code": "6109",
+      "Tax Rate": 5,
+      "Count": 31,
+      "Taxable_Value": 9999876.29,
+      "IGST": 499993.81,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 10499870.1
+    },
+    {
+      "HSN Code": "7308",
+      "Tax Rate": 18,
+      "Count": 29,
+      "Taxable_Value": 9688206.5,
+      "IGST": 1743877.2,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 11432083.7
+    },
+    {
+      "HSN Code": "7318",
+      "Tax Rate": 18,
+      "Count": 45,
+      "Taxable_Value": 13167565.88,
+      "IGST": 2370161.86,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 15537727.74
+    },
+    {
+      "HSN Code": "8443",
+      "Tax Rate": 18,
+      "Count": 32,
+      "Taxable_Value": 10308563.12,
+      "IGST": 1855541.38,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 12164104.5
+    },
+    {
+      "HSN Code": "8471",
+      "Tax Rate": 18,
+      "Count": 24,
+      "Taxable_Value": 7425592.29,
+      "IGST": 1336606.63,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 8762198.92
+    },
+    {
+      "HSN Code": "8504",
+      "Tax Rate": 18,
+      "Count": 44,
+      "Taxable_Value": 14790043.84,
+      "IGST": 2662207.91,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 17452251.75
+    },
+    {
+      "HSN Code": "8517",
+      "Tax Rate": 18,
+      "Count": 32,
+      "Taxable_Value": 9976707.38,
+      "IGST": 1795807.34,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 11772514.72
+    },
+    {
+      "HSN Code": "8528",
+      "Tax Rate": 28,
+      "Count": 27,
+      "Taxable_Value": 8737519.86,
+      "IGST": 2446505.55,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 11184025.41
+    },
+    {
+      "HSN Code": "8544",
+      "Tax Rate": 18,
+      "Count": 37,
+      "Taxable_Value": 11432615.6,
+      "IGST": 2057870.81,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 13490486.41
+    },
+    {
+      "HSN Code": "9001",
+      "Tax Rate": 12,
+      "Count": 27,
+      "Taxable_Value": 8741526.43,
+      "IGST": 1048983.18,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 9790509.61
+    },
+    {
+      "HSN Code": "9403",
+      "Tax Rate": 18,
+      "Count": 35,
+      "Taxable_Value": 10703799.32,
+      "IGST": 1926683.88,
+      "CGST": 0,
+      "SGST": 0,
+      "Total_Value": 12630483.2
+    }
+  ],
+  "top_vendors_at_risk": [
+    {
+      "Vendor GSTIN": "10NQIVT6210H4ZE",
+      "Vendor_Name": "Vendor_035 Enterprises",
+      "Books_ITC": 532791.96,
+      "Portal_ITC": 317275.49,
+      "ITC_Difference": 215516.47,
+      "Risk": "CRITICAL"
+    },
+    {
+      "Vendor GSTIN": "03YWEMF4039I4ZS",
+      "Vendor_Name": "Vendor_018 Enterprises",
+      "Books_ITC": 548030.55,
+      "Portal_ITC": 351233.22,
+      "ITC_Difference": 196797.33,
+      "Risk": "CRITICAL"
+    },
+    {
+      "Vendor GSTIN": "16AJTWY4756H4ZO",
+      "Vendor_Name": "Vendor_041 Enterprises",
+      "Books_ITC": 549051.05,
+      "Portal_ITC": 436808.29,
+      "ITC_Difference": 112242.76,
+      "Risk": "CRITICAL"
+    },
+    {
+      "Vendor GSTIN": "03KIMBV3790Y5ZY",
+      "Vendor_Name": "Vendor_040 Enterprises",
+      "Books_ITC": 404519.64,
+      "Portal_ITC": 296356.68,
+      "ITC_Difference": 108162.96,
+      "Risk": "CRITICAL"
+    },
+    {
+      "Vendor GSTIN": "04GBAOP0700B3ZE",
+      "Vendor_Name": "Vendor_014 Enterprises",
+      "Books_ITC": 268686.16,
+      "Portal_ITC": 177479.15,
+      "ITC_Difference": 91207.01,
+      "Risk": "CRITICAL"
+    },
+    {
+      "Vendor GSTIN": "15PSNVO8742H3Z7",
+      "Vendor_Name": "Vendor_038 Enterprises",
+      "Books_ITC": 307322.68,
+      "Portal_ITC": 217037.33,
+      "ITC_Difference": 90285.35,
+      "Risk": "CRITICAL"
+    },
+    {
+      "Vendor GSTIN": "02PNWEY0156H4ZH",
+      "Vendor_Name": "Vendor_020 Enterprises",
+      "Books_ITC": 458223.38,
+      "Portal_ITC": 375397.4,
+      "ITC_Difference": 82825.98,
+      "Risk": "CRITICAL"
+    },
+    {
+      "Vendor GSTIN": "17WLFOS2396O5Z2",
+      "Vendor_Name": "Vendor_013 Enterprises",
+      "Books_ITC": 273068.23,
+      "Portal_ITC": 190435.5,
+      "ITC_Difference": 82632.73,
+      "Risk": "CRITICAL"
+    },
+    {
+      "Vendor GSTIN": "14JKWBQ6078D2ZM",
+      "Vendor_Name": "Vendor_016 Enterprises",
+      "Books_ITC": 180339.52,
+      "Portal_ITC": 105961.06,
+      "ITC_Difference": 74378.46,
+      "Risk": "CRITICAL"
+    },
+    {
+      "Vendor GSTIN": "16QHCHH3512W2ZN",
+      "Vendor_Name": "Vendor_039 Enterprises",
+      "Books_ITC": 377456.12,
+      "Portal_ITC": 308789.36,
+      "ITC_Difference": 68666.76,
+      "Risk": "CRITICAL"
+    }
+  ],
+  "schedule": {
+    "Period": "April 2025",
+    "Day 1-5": "Fetch Odoo data (01-Apr to 05-Apr)",
+    "Day 6": "Download GSTR-2B from GST Portal (06-Apr)",
+    "Day 7": "Run reconciliation engine (07-Apr)",
+    "Day 8": "Generate compliance reports (08-Apr)",
+    "Day 10": "GSTR-1 filing deadline (11th of next month)",
+    "Day 13": "GSTR-3B preparation deadline",
+    "Day 20": "GSTR-3B filing deadline (20th of next month)"
+  }
+}

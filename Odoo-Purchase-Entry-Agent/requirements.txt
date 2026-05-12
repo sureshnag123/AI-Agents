@@ -1,0 +1,18 @@
+# Requirements — Odoo Purchase Entry Agent
+
+# Odoo XML-RPC (built-in xmlrpc.client — no extra package needed)
+
+# Environment variables
+python-dotenv
+
+# HTTP requests (Google Drive PDF download)
+requests
+
+# Excel read/write (control sheet)
+openpyxl
+
+# PDF to image conversion — no Poppler needed, works on Windows natively
+PyMuPDF
+
+# Gemini API (free tier — invoice OCR for both digital and scanned PDFs)
+google-generativeai

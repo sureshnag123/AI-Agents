@@ -1,0 +1,14 @@
+# ── Ignore patterns ──────────────────────────────────────────────
+.env
+.tmp/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+node_modules/
+*.egg-info/
+dist/
+build/
+.DS_Store
+Thumbs.db

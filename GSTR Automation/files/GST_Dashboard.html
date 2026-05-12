@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GST Compliance Dashboard — Q1 FY 2025-26</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e17;--surface:#111827;--surface2:#1a2332;--surface3:#1f2b3d;
+  --border:#2a3548;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --teal:#2dd4bf;--teal-dim:#0d9488;--teal-bg:rgba(45,212,191,0.08);
+  --red:#f87171;--red-bg:rgba(248,113,113,0.1);
+  --amber:#fbbf24;--amber-bg:rgba(251,191,36,0.08);
+  --blue:#60a5fa;--blue-bg:rgba(96,165,250,0.08);
+  --green:#4ade80;--green-bg:rgba(74,222,128,0.08);
+  --orange:#fb923c;--orange-bg:rgba(251,146,60,0.08);
+  --purple:#a78bfa;
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* Grain overlay */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;opacity:.03;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Layout */
+.container{max-width:1440px;margin:0 auto;padding:24px 32px}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;padding:20px 0;margin-bottom:24px;border-bottom:1px solid var(--border)}
+.header h1{font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.header h1 span{color:var(--teal);font-weight:600}
+.header-meta{display:flex;gap:20px;align-items:center}
+.header-meta .badge{font-size:11px;padding:4px 12px;border-radius:20px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase}
+.badge-period{background:var(--teal-bg);color:var(--teal);border:1px solid rgba(45,212,191,0.2)}
+.badge-live{background:var(--green-bg);color:var(--green);border:1px solid rgba(74,222,128,0.2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* Navigation */
+.nav{display:flex;gap:4px;margin-bottom:24px;background:var(--surface);border-radius:var(--radius);padding:4px;border:1px solid var(--border)}
+.nav-btn{padding:10px 20px;border:none;background:transparent;color:var(--text2);cursor:pointer;font-family:'DM Sans';font-size:13px;font-weight:500;border-radius:var(--radius-sm);transition:all .2s}
+.nav-btn:hover{color:var(--text);background:var(--surface2)}
+.nav-btn.active{background:var(--teal);color:var(--bg);font-weight:600}
+
+/* KPI Cards */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden;transition:border-color .2s}
+.kpi:hover{border-color:var(--teal-dim)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
+.kpi.teal::before{background:var(--teal)}.kpi.red::before{background:var(--red)}
+.kpi.amber::before{background:var(--amber)}.kpi.blue::before{background:var(--blue)}
+.kpi.green::before{background:var(--green)}.kpi.orange::before{background:var(--orange)}
+.kpi-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:8px}
+.kpi-value{font-size:26px;font-weight:700;letter-spacing:-1px}
+.kpi-sub{font-size:12px;color:var(--text2);margin-top:4px}
+
+/* Panels */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:24px}
+@media(max-width:1100px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.panel-hdr{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.panel-hdr h3{font-size:14px;font-weight:600;letter-spacing:-0.2px}
+.panel-hdr .count{font-size:12px;color:var(--text3);font-weight:500}
+.panel-body{padding:20px}
+
+/* Alerts */
+.alert-item{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);align-items:flex-start;transition:background .15s}
+.alert-item:hover{background:var(--surface2)}
+.alert-item:last-child{border-bottom:none}
+.alert-sev{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:0.5px;white-space:nowrap;min-width:64px;text-align:center}
+.sev-CRITICAL{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
+.sev-HIGH{background:var(--orange-bg);color:var(--orange);border:1px solid rgba(251,146,60,0.2)}
+.sev-MEDIUM{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(251,191,36,0.2)}
+.sev-LOW{background:var(--green-bg);color:var(--green);border:1px solid rgba(74,222,128,0.2)}
+.alert-body{flex:1}
+.alert-msg{font-size:13px;font-weight:500;margin-bottom:2px}
+.alert-action{font-size:11px;color:var(--text3)}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;border-bottom:2px solid var(--border);background:var(--surface2)}
+td{padding:10px 14px;border-bottom:1px solid var(--border)}
+tr:hover td{background:var(--surface2)}
+.risk-CRITICAL{color:var(--red);font-weight:600}.risk-HIGH{color:var(--orange);font-weight:600}
+.risk-MEDIUM{color:var(--amber)}.risk-LOW{color:var(--green)}
+.text-right{text-align:right}
+.text-teal{color:var(--teal)}.text-red{color:var(--red)}
+
+/* Chart containers */
+.chart-wrap{position:relative;height:280px;padding:12px}
+
+/* Sections */
+.section{display:none}.section.active{display:block}
+
+/* Schedule */
+.schedule-item{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+.schedule-item:last-child{border-bottom:none}
+.schedule-day{min-width:80px;font-weight:600;color:var(--teal);font-size:13px}
+.schedule-task{font-size:13px;color:var(--text2)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* Fade in animation */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeUp .4s ease both}
+.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}.d4{animation-delay:.2s}.d5{animation-delay:.25s}.d6{animation-delay:.3s}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header fade-in">
+    <h1>GST Compliance <span>Dashboard</span></h1>
+    <div class="header-meta">
+      <span class="badge badge-period">Q1 FY 2025-26</span>
+      <span class="badge badge-live">● Engine Active</span>
+      <span style="font-size:12px;color:var(--text3)">Generated: 13 Mar 2026</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav fade-in d1">
+    <button class="nav-btn active" onclick="showTab('overview')">Overview</button>
+    <button class="nav-btn" onclick="showTab('gstr1')">GSTR-1</button>
+    <button class="nav-btn" onclick="showTab('recon')">Reconciliation</button>
+    <button class="nav-btn" onclick="showTab('itc')">ITC Analysis</button>
+    <button class="nav-btn" onclick="showTab('alerts')">Alerts</button>
+    <button class="nav-btn" onclick="showTab('schedule')">Automation</button>
+  </div>
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <div class="section active" id="sec-overview">
+    <div class="kpi-row fade-in d2">
+      <div class="kpi teal"><div class="kpi-label">Total Invoices</div><div class="kpi-value">504</div><div class="kpi-sub">B2B: 371 · B2C: 105 · CDN: 13 · Exp: 15</div></div>
+      <div class="kpi blue"><div class="kpi-label">GST Liability</div><div class="kpi-value mono">₹2.64Cr</div><div class="kpi-sub">IGST: ₹2.64Cr · CGST+SGST: ₹0</div></div>
+      <div class="kpi green"><div class="kpi-label">Claimable ITC</div><div class="kpi-value mono">₹92.1L</div><div class="kpi-sub">Eligible: ₹1.00Cr · Blocked: ₹7.96L</div></div>
+      <div class="kpi red"><div class="kpi-label">ITC at Risk</div><div class="kpi-value mono">₹22.9L</div><div class="kpi-sub">69 invoices missing from 2B</div></div>
+      <div class="kpi amber"><div class="kpi-label">Recon Match Rate</div><div class="kpi-value">90.9%</div><div class="kpi-sub">301 matched · 30 mismatches</div></div>
+      <div class="kpi orange"><div class="kpi-label">Compliance Issues</div><div class="kpi-value">11</div><div class="kpi-sub">4 Critical · 4 High · 3 Medium</div></div>
+    </div>
+
+    <div class="grid-2 fade-in d3">
+      <!-- Alerts -->
+      <div class="panel">
+        <div class="panel-hdr"><h3>Compliance Alerts</h3><span class="count">11 issues</span></div>
+        <div id="alert-list" style="max-height:440px;overflow-y:auto"></div>
+      </div>
+      <!-- Charts -->
+      <div class="panel">
+        <div class="panel-hdr"><h3>Invoice Distribution</h3></div>
+        <div class="chart-wrap"><canvas id="chartInvDist"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid-2 fade-in d4">
+      <div class="panel">
+        <div class="panel-hdr"><h3>ITC Waterfall</h3></div>
+        <div class="chart-wrap"><canvas id="chartITC"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><h3>Reconciliation Breakdown</h3></div>
+        <div class="chart-wrap"><canvas id="chartRecon"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ GSTR-1 ═══ -->
+  <div class="section" id="sec-gstr1">
+    <div class="kpi-row fade-in d1">
+      <div class="kpi teal"><div class="kpi-label">Total Taxable</div><div class="kpi-value mono">₹16.0Cr</div></div>
+      <div class="kpi blue"><div class="kpi-label">B2B Invoices</div><div class="kpi-value">371</div></div>
+      <div class="kpi green"><div class="kpi-label">B2C (L+S)</div><div class="kpi-value">105</div></div>
+      <div class="kpi amber"><div class="kpi-label">Credit Notes</div><div class="kpi-value">13</div></div>
+      <div class="kpi orange"><div class="kpi-label">Exports</div><div class="kpi-value">15</div></div>
+    </div>
+    <div class="grid-2 fade-in d2">
+      <div class="panel">
+        <div class="panel-hdr"><h3>HSN-wise Tax Summary</h3></div>
+        <div class="chart-wrap" style="height:320px"><canvas id="chartHSN"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><h3>GSTR-1 Filing Summary</h3></div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>Table</th><th>Description</th><th class="text-right">Count</th><th class="text-right">Taxable (₹)</th></tr></thead>
+            <tbody>
+              <tr><td>4A/4B</td><td>B2B Supply</td><td class="text-right">371</td><td class="text-right mono">12,10,48,231</td></tr>
+              <tr><td>5</td><td>B2C Large (Interstate >₹2.5L)</td><td class="text-right">75</td><td class="text-right mono">2,68,44,019</td></tr>
+              <tr><td>7</td><td>B2C Others</td><td class="text-right">30</td><td class="text-right mono">74,32,890</td></tr>
+              <tr><td>9</td><td>Credit/Debit Notes</td><td class="text-right">13</td><td class="text-right mono">31,15,640</td></tr>
+              <tr><td>6A</td><td>Exports</td><td class="text-right">15</td><td class="text-right mono">1,15,75,507</td></tr>
+              <tr><td>12</td><td>HSN Summary</td><td class="text-right">16</td><td class="text-right mono">—</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:16px;padding:12px;background:var(--teal-bg);border-radius:var(--radius-sm);font-size:12px;color:var(--teal)">
+            ✓ GSTR-1 Upload-Ready JSON generated — 53 B2B entries, 16 HSN entries
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel fade-in d3">
+      <div class="panel-hdr"><h3>Validation Errors</h3><span class="count">9 issues to fix before filing</span></div>
+      <div class="panel-body">
+        <table>
+          <thead><tr><th>Severity</th><th>Type</th><th>Count</th><th>Action Required</th></tr></thead>
+          <tbody>
+            <tr><td><span class="alert-sev sev-CRITICAL">CRITICAL</span></td><td>Duplicate Invoices</td><td>4</td><td>Remove duplicates from sales register in Odoo</td></tr>
+            <tr><td><span class="alert-sev sev-HIGH">HIGH</span></td><td>Invalid GSTIN</td><td>3</td><td>Correct GSTIN format — check against GST portal</td></tr>
+            <tr><td><span class="alert-sev sev-MEDIUM">MEDIUM</span></td><td>Missing HSN Code</td><td>1</td><td>Update product master in Odoo with HSN codes</td></tr>
+            <tr><td><span class="alert-sev sev-MEDIUM">MEDIUM</span></td><td>Possible OCR Error</td><td>1</td><td>Verify GSTIN against original invoice documents</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RECONCILIATION ═══ -->
+  <div class="section" id="sec-recon">
+    <div class="kpi-row fade-in d1">
+      <div class="kpi teal"><div class="kpi-label">Books Total</div><div class="kpi-value">403</div></div>
+      <div class="kpi blue"><div class="kpi-label">2B Total</div><div class="kpi-value">359</div></div>
+      <div class="kpi green"><div class="kpi-label">Matched</div><div class="kpi-value text-teal">301</div></div>
+      <div class="kpi red"><div class="kpi-label">Missing in 2B</div><div class="kpi-value text-red">69</div></div>
+      <div class="kpi amber"><div class="kpi-label">Mismatches</div><div class="kpi-value" style="color:var(--amber)">30</div></div>
+      <div class="kpi orange"><div class="kpi-label">Missing in Books</div><div class="kpi-value" style="color:var(--orange)">25</div></div>
+    </div>
+    <div class="grid-2 fade-in d2">
+      <div class="panel">
+        <div class="panel-hdr"><h3>Reconciliation Status</h3></div>
+        <div class="chart-wrap"><canvas id="chartRecon2"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><h3>Action Items</h3></div>
+        <div class="panel-body">
+          <div style="space-y:12px">
+            <div style="padding:14px;background:var(--red-bg);border-radius:var(--radius-sm);margin-bottom:12px;border-left:3px solid var(--red)">
+              <div style="font-weight:600;font-size:13px;color:var(--red);margin-bottom:4px">69 Invoices Missing in GSTR-2B</div>
+              <div style="font-size:12px;color:var(--text2)">₹22.9L ITC at risk. Contact vendors to ensure they file GSTR-1 for this period. Prioritize high-value invoices first.</div>
+            </div>
+            <div style="padding:14px;background:var(--amber-bg);border-radius:var(--radius-sm);margin-bottom:12px;border-left:3px solid var(--amber)">
+              <div style="font-weight:600;font-size:13px;color:var(--amber);margin-bottom:4px">30 Value/Tax Mismatches</div>
+              <div style="font-size:12px;color:var(--text2)">₹13,494 total tax difference. Reconcile each invoice with the vendor's copy. Amend in Odoo or request vendor correction.</div>
+            </div>
+            <div style="padding:14px;background:var(--orange-bg);border-radius:var(--radius-sm);margin-bottom:12px;border-left:3px solid var(--orange)">
+              <div style="font-weight:600;font-size:13px;color:var(--orange);margin-bottom:4px">25 Invoices in 2B Not in Books</div>
+              <div style="font-size:12px;color:var(--text2)">Verify with accounts payable. If valid purchases, book in Odoo to claim ITC. If unrecognized, dispute on IMS portal.</div>
+            </div>
+            <div style="padding:14px;background:var(--blue-bg);border-radius:var(--radius-sm);border-left:3px solid var(--blue)">
+              <div style="font-weight:600;font-size:13px;color:var(--blue);margin-bottom:4px">6 Duplicate Invoices in Purchase Register</div>
+              <div style="font-size:12px;color:var(--text2)">Remove duplicates to avoid double ITC claims. Cross-check with vendor statements.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ITC ANALYSIS ═══ -->
+  <div class="section" id="sec-itc">
+    <div class="kpi-row fade-in d1">
+      <div class="kpi teal"><div class="kpi-label">ITC (Books)</div><div class="kpi-value mono">₹1.32Cr</div></div>
+      <div class="kpi blue"><div class="kpi-label">ITC (GSTR-2B)</div><div class="kpi-value mono">₹1.13Cr</div></div>
+      <div class="kpi green"><div class="kpi-label">Eligible</div><div class="kpi-value mono">₹1.00Cr</div></div>
+      <div class="kpi red"><div class="kpi-label">Net Difference</div><div class="kpi-value mono text-red">₹31.9L</div></div>
+      <div class="kpi amber"><div class="kpi-label">Blocked ITC</div><div class="kpi-value mono">₹7.96L</div></div>
+      <div class="kpi orange"><div class="kpi-label">Vendors Not Filed</div><div class="kpi-value text-red">23</div></div>
+    </div>
+    <div class="grid-2 fade-in d2">
+      <div class="panel">
+        <div class="panel-hdr"><h3>ITC Composition</h3></div>
+        <div class="chart-wrap" style="height:320px"><canvas id="chartITCPie"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><h3>Top 10 Vendors by ITC Risk</h3></div>
+        <div class="panel-body" style="overflow-x:auto" id="vendor-table-wrap"></div>
+      </div>
+    </div>
+    <div class="panel fade-in d3">
+      <div class="panel-hdr"><h3>Blocked ITC — Section 17(5) Breakdown</h3></div>
+      <div class="panel-body">
+        <table>
+          <thead><tr><th>Category</th><th class="text-right">Blocked Amount (₹)</th><th>GST Section</th></tr></thead>
+          <tbody>
+            <tr><td>Motor vehicles</td><td class="text-right mono">2,48,710</td><td>Section 17(5)(a)</td></tr>
+            <tr><td>Food & beverages</td><td class="text-right mono">1,85,320</td><td>Section 17(5)(b)</td></tr>
+            <tr><td>Personal consumption</td><td class="text-right mono">1,72,440</td><td>Section 17(5)(g)</td></tr>
+            <tr><td>Club membership</td><td class="text-right mono">98,540</td><td>Section 17(5)(b)</td></tr>
+            <tr><td>Free samples</td><td class="text-right mono">90,684</td><td>Section 17(5)(h)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ALERTS ═══ -->
+  <div class="section" id="sec-alerts">
+    <div class="panel fade-in d1">
+      <div class="panel-hdr"><h3>All Compliance Alerts</h3><span class="count">Sorted by severity</span></div>
+      <div id="alert-list-full" style="max-height:600px;overflow-y:auto"></div>
+    </div>
+  </div>
+
+  <!-- ═══ AUTOMATION SCHEDULE ═══ -->
+  <div class="section" id="sec-schedule">
+    <div class="kpi-row fade-in d1">
+      <div class="kpi teal"><div class="kpi-label">Next Run</div><div class="kpi-value" style="font-size:18px">April 2025</div></div>
+      <div class="kpi blue"><div class="kpi-label">Data Fetch</div><div class="kpi-value" style="font-size:18px">Day 1–5</div></div>
+      <div class="kpi green"><div class="kpi-label">Recon</div><div class="kpi-value" style="font-size:18px">Day 7</div></div>
+      <div class="kpi amber"><div class="kpi-label">GSTR-1 Due</div><div class="kpi-value" style="font-size:18px">11th</div></div>
+      <div class="kpi orange"><div class="kpi-label">GSTR-3B Due</div><div class="kpi-value" style="font-size:18px">20th</div></div>
+    </div>
+    <div class="grid-2 fade-in d2">
+      <div class="panel">
+        <div class="panel-hdr"><h3>Monthly Automation Workflow</h3></div>
+        <div class="panel-body">
+          <div class="schedule-item"><div class="schedule-day">Day 1–5</div><div class="schedule-task">Fetch Odoo sales & purchase invoices via XML-RPC API. Validate data quality.</div></div>
+          <div class="schedule-item"><div class="schedule-day">Day 6</div><div class="schedule-task">Download GSTR-2B from GST portal (JSON/Excel). Parse and normalize data.</div></div>
+          <div class="schedule-item"><div class="schedule-day">Day 7</div><div class="schedule-task">Run full reconciliation engine: match invoices, detect mismatches, classify results.</div></div>
+          <div class="schedule-item"><div class="schedule-day">Day 8</div><div class="schedule-task">Generate compliance report (Excel + JSON), ITC analysis, and vendor risk assessment.</div></div>
+          <div class="schedule-item"><div class="schedule-day">Day 9</div><div class="schedule-task">Email alerts to finance team with action items. Start vendor follow-ups.</div></div>
+          <div class="schedule-item"><div class="schedule-day">Day 10</div><div class="schedule-task">Prepare GSTR-1 upload data. Review and validate before submission.</div></div>
+          <div class="schedule-item"><div class="schedule-day">Day 11</div><div class="schedule-task"><strong>GSTR-1 filing deadline.</strong> Upload via portal or API.</div></div>
+          <div class="schedule-item"><div class="schedule-day">Day 13–18</div><div class="schedule-task">Prepare GSTR-3B: reconcile ITC, compute net liability, verify output tax.</div></div>
+          <div class="schedule-item"><div class="schedule-day">Day 20</div><div class="schedule-task"><strong>GSTR-3B filing deadline.</strong> Submit and make payment.</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><h3>Integration Architecture</h3></div>
+        <div class="panel-body" style="font-size:13px;color:var(--text2);line-height:1.8">
+          <div style="padding:16px;background:var(--surface2);border-radius:var(--radius-sm);margin-bottom:16px;border:1px dashed var(--border)">
+            <div style="font-weight:600;color:var(--teal);margin-bottom:8px;font-size:14px">Odoo ERP Connection</div>
+            <div>Protocol: XML-RPC (xmlrpc/2/object)</div>
+            <div>Models: account.move, account.move.line, res.partner, account.tax</div>
+            <div>Auth: API key or password-based</div>
+            <div>File: <span class="mono" style="color:var(--amber)">odoo_connector.py</span></div>
+          </div>
+          <div style="padding:16px;background:var(--surface2);border-radius:var(--radius-sm);margin-bottom:16px;border:1px dashed var(--border)">
+            <div style="font-weight:600;color:var(--blue);margin-bottom:8px;font-size:14px">GST Portal Input</div>
+            <div>Source: GSTR-2B download (JSON or Excel)</div>
+            <div>Parser: Supports both formats automatically</div>
+            <div>Fields: Supplier GSTIN, Invoice, Taxable, Tax, Filing Status</div>
+          </div>
+          <div style="padding:16px;background:var(--surface2);border-radius:var(--radius-sm);border:1px dashed var(--border)">
+            <div style="font-weight:600;color:var(--green);margin-bottom:8px;font-size:14px">Output Files</div>
+            <div>1. <span class="mono">GST_Compliance_Report_v2.xlsx</span> — 18-sheet workbook</div>
+            <div>2. <span class="mono">GSTR1_Upload_Ready.json</span> — Portal upload format</div>
+            <div>3. <span class="mono">dashboard_data.json</span> — Dashboard feed</div>
+            <div>4. <span class="mono">odoo_connector.py</span> — Odoo API module</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const alerts = [
+  {s:"CRITICAL",cat:"GSTR-1",msg:"4 duplicate invoices detected",action:"Remove duplicates before filing GSTR-1",impact:"Filing rejection risk"},
+  {s:"CRITICAL",cat:"Reconciliation",msg:"69 purchase invoices missing from GSTR-2B",action:"Contact vendors to file their GSTR-1",impact:"₹22.9L ITC at risk"},
+  {s:"CRITICAL",cat:"ITC",msg:"23 vendors have not filed GSTR-1",action:"Send reminder to non-compliant vendors",impact:"ITC will be blocked/reversed"},
+  {s:"CRITICAL",cat:"ITC",msg:"Net ITC difference of ₹31.9L",action:"Resolve all mismatches before filing GSTR-3B",impact:"Incorrect ITC claim in 3B"},
+  {s:"HIGH",cat:"GSTR-1",msg:"3 invalid GSTINs in sales register",action:"Correct GSTINs in Odoo before filing",impact:"Invoice rejection on portal"},
+  {s:"HIGH",cat:"Reconciliation",msg:"30 invoices have value/tax differences",action:"Reconcile with vendor invoices and amend",impact:"₹13,494 tax difference"},
+  {s:"HIGH",cat:"Reconciliation",msg:"25 invoices in 2B not recorded in books",action:"Verify and book valid invoices in Odoo",impact:"Potential unclaimed ITC"},
+  {s:"HIGH",cat:"Reconciliation",msg:"6 duplicate purchase invoices detected",action:"Remove duplicate entries from purchase register",impact:"ITC overclaim risk"},
+  {s:"MEDIUM",cat:"GSTR-1",msg:"1 invoice missing HSN code",action:"Update HSN codes in Odoo product master",impact:"HSN summary incomplete"},
+  {s:"MEDIUM",cat:"GSTR-1",msg:"1 possible OCR error in GSTIN",action:"Verify flagged GSTINs against original docs",impact:"Incorrect B2B reporting"},
+  {s:"MEDIUM",cat:"ITC",msg:"₹7.96L blocked under Section 17(5)",action:"Review blocked items for correct classification",impact:"Non-claimable ITC"},
+];
+
+const topVendors = [
+  {gstin:"08XXXXX0001X1ZA",name:"Vendor_012",books:285400,portal:0,diff:285400,risk:"CRITICAL"},
+  {gstin:"27XXXXX0002X1ZB",name:"Vendor_045",books:198700,portal:42300,diff:156400,risk:"CRITICAL"},
+  {gstin:"33XXXXX0003X1ZC",name:"Vendor_023",books:142800,portal:0,diff:142800,risk:"CRITICAL"},
+  {gstin:"07XXXXX0004X1ZD",name:"Vendor_008",books:118500,portal:26200,diff:92300,risk:"HIGH"},
+  {gstin:"09XXXXX0005X1ZE",name:"Vendor_031",books:95200,portal:18400,diff:76800,risk:"HIGH"},
+  {gstin:"24XXXXX0006X1ZF",name:"Vendor_019",books:82100,portal:28900,diff:53200,risk:"HIGH"},
+  {gstin:"29XXXXX0007X1ZG",name:"Vendor_042",books:74600,portal:34100,diff:40500,risk:"HIGH"},
+  {gstin:"36XXXXX0008X1ZH",name:"Vendor_005",books:61200,portal:28800,diff:32400,risk:"MEDIUM"},
+  {gstin:"19XXXXX0009X1ZI",name:"Vendor_037",books:48900,portal:24600,diff:24300,risk:"MEDIUM"},
+  {gstin:"06XXXXX0010X1ZJ",name:"Vendor_028",books:38700,portal:22100,diff:16600,risk:"MEDIUM"},
+];
+
+// ── NAV ──
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── ALERTS ──
+function renderAlerts(containerId, items){
+  const el=document.getElementById(containerId);
+  el.innerHTML=items.map(a=>`
+    <div class="alert-item">
+      <span class="alert-sev sev-${a.s}">${a.s}</span>
+      <div class="alert-body">
+        <div class="alert-msg">${a.msg}</div>
+        <div class="alert-action">→ ${a.action} ${a.impact?'· <em>'+a.impact+'</em>':''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+renderAlerts('alert-list',alerts);
+renderAlerts('alert-list-full',alerts);
+
+// ── VENDOR TABLE ──
+document.getElementById('vendor-table-wrap').innerHTML=`
+  <table><thead><tr><th>Vendor</th><th class="text-right">ITC Books</th><th class="text-right">ITC 2B</th><th class="text-right">Diff</th><th>Risk</th></tr></thead><tbody>
+  ${topVendors.map(v=>`<tr><td><div style="font-weight:500">${v.name}</div><div style="font-size:10px;color:var(--text3)" class="mono">${v.gstin}</div></td>
+  <td class="text-right mono">₹${(v.books).toLocaleString('en-IN')}</td>
+  <td class="text-right mono">₹${(v.portal).toLocaleString('en-IN')}</td>
+  <td class="text-right mono text-red">₹${(v.diff).toLocaleString('en-IN')}</td>
+  <td><span class="risk-${v.risk}">${v.risk}</span></td></tr>`).join('')}
+  </tbody></table>`;
+
+// ── CHARTS ──
+const cOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{family:'DM Sans',size:11}}}}};
+const gridColor='rgba(42,53,72,0.6)';
+
+// Invoice Distribution (Doughnut)
+new Chart(document.getElementById('chartInvDist'),{type:'doughnut',data:{
+  labels:['B2B','B2C Large','B2C Small','Credit Notes','Exports'],
+  datasets:[{data:[371,75,30,13,15],backgroundColor:['#2dd4bf','#60a5fa','#a78bfa','#fbbf24','#fb923c'],borderColor:'#111827',borderWidth:2}]
+},options:{...cOpts,cutout:'65%'}});
+
+// ITC Bar
+new Chart(document.getElementById('chartITC'),{type:'bar',data:{
+  labels:['Books ITC','2B ITC','Eligible','Blocked','Not in 2B','Claimable'],
+  datasets:[{data:[131.98,113.40,100.07,7.96,22.86,92.12],
+    backgroundColor:['#2dd4bf','#60a5fa','#4ade80','#f87171','#fbbf24','#a78bfa'],borderRadius:6,borderSkipped:false}]
+},options:{...cOpts,scales:{y:{ticks:{color:'#64748b',callback:v=>v+'L'},grid:{color:gridColor}},x:{ticks:{color:'#94a3b8'},grid:{display:false}}},plugins:{...cOpts.plugins,legend:{display:false}}}});
+
+// Recon Pie
+new Chart(document.getElementById('chartRecon'),{type:'doughnut',data:{
+  labels:['Matched','Tax Mismatch','Missing in 2B','Missing in Books','Duplicates'],
+  datasets:[{data:[301,30,69,25,6],backgroundColor:['#4ade80','#fbbf24','#f87171','#fb923c','#a78bfa'],borderColor:'#111827',borderWidth:2}]
+},options:{...cOpts,cutout:'60%'}});
+
+// Recon Bar (recon tab)
+new Chart(document.getElementById('chartRecon2'),{type:'bar',data:{
+  labels:['Books Total','2B Total','Matched','Mismatch','Missing 2B','Missing Books'],
+  datasets:[{data:[403,359,301,30,69,25],
+    backgroundColor:['#2dd4bf','#60a5fa','#4ade80','#fbbf24','#f87171','#fb923c'],borderRadius:6,borderSkipped:false}]
+},options:{...cOpts,indexAxis:'y',scales:{x:{ticks:{color:'#64748b'},grid:{color:gridColor}},y:{ticks:{color:'#94a3b8'},grid:{display:false}}},plugins:{...cOpts.plugins,legend:{display:false}}}});
+
+// HSN Chart
+new Chart(document.getElementById('chartHSN'),{type:'bar',data:{
+  labels:['8471','8517','9403','8528','7308','3926','8544','8443','8504','3808','7318','3004','4820','6109','9001'],
+  datasets:[
+    {label:'Taxable Value (₹L)',data:[128,115,108,95,88,82,76,72,68,61,54,48,42,35,28],backgroundColor:'rgba(45,212,191,0.7)',borderRadius:4},
+    {label:'Tax (₹L)',data:[23,21,19,27,16,15,14,13,12,11,10,6,5,2,3],backgroundColor:'rgba(96,165,250,0.7)',borderRadius:4}
+  ]
+},options:{...cOpts,scales:{y:{ticks:{color:'#64748b',callback:v=>v+'L'},grid:{color:gridColor}},x:{ticks:{color:'#94a3b8',maxRotation:45},grid:{display:false}}}}});
+
+// ITC Pie (itc tab)
+new Chart(document.getElementById('chartITCPie'),{type:'doughnut',data:{
+  labels:['Claimable ITC','Blocked ITC','Ineligible (2B)','Not in 2B','Mismatch Impact'],
+  datasets:[{data:[92.12,7.96,13.32,22.86,0.13],backgroundColor:['#4ade80','#f87171','#fb923c','#fbbf24','#a78bfa'],borderColor:'#111827',borderWidth:2}]
+},options:{...cOpts,cutout:'60%'}});
+</script>
+</body>
+</html>

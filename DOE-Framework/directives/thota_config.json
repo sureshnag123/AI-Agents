@@ -1,0 +1,26 @@
+{
+  "company_name": "THOTA HOSPITALITY LLP",
+  "pan": "AAWFT5455G",
+  "state": "Karnataka",
+  "pf_office": "BANGALORE [BNG]",
+  "epfo_establishment_id": "BGBNG3648720000",
+  "payroll_file": "C:/Users/User/Downloads/Thota_Payroll 2025.xlsx",
+  "sheet_naming_pattern": "Salary Stmt-{MON}{YY}",
+  "sheet_examples": [
+    "Salary Stmt-MAR26",
+    "Salary Stmt-FEB26",
+    "Salary Stmt-JAN26",
+    "Salary Stmt-DEC25"
+  ],
+  "compliance_deadlines": {
+    "epfo_actual": "15th of following month",
+    "epfo_target": "14th of following month",
+    "note": "Complete 1 day before actual deadline to avoid last-minute rush"
+  },
+  "notes": [
+    "Gokul (Purchase) — PF deducted but NO UAN in payroll sheet as of Mar 2026. Must be resolved before ECR can include him.",
+    "Consultant row (Suresh N) appears below TOTAL row — excluded from ECR (no PF contribution).",
+    "ESI numbers are present in 'PF UAN & ESI IP' sheet for eligible employees.",
+    "MAR25 sheet has different column layout than MAR26 onwards — use Salary Stmt-MAR26 format for FY2025-26."
+  ]
+}

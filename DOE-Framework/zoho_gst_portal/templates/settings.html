@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — Zoho → GST Portal</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #2d3748; min-height: 100vh; }
+
+  nav { background: #1a365d; color: white; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  nav .brand { font-size: 18px; font-weight: 700; }
+  nav .brand span { color: #63b3ed; }
+  nav a { color: #bee3f8; text-decoration: none; font-size: 14px; padding: 6px 14px; border-radius: 6px; }
+  nav a:hover { background: #2c5282; }
+
+  .page { max-width: 700px; margin: 40px auto; padding: 0 20px; }
+
+  .alert { padding: 14px 18px; border-radius: 10px; margin-bottom: 24px; font-size: 14px; font-weight: 500; }
+  .alert.success { background: #c6f6d5; color: #22543d; border-left: 4px solid #38a169; }
+  .alert.warning { background: #fefcbf; color: #744210; border-left: 4px solid #d69e2e; }
+  .alert.danger  { background: #fed7d7; color: #822727; border-left: 4px solid #e53e3e; }
+
+  .card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 32px; margin-bottom: 24px; }
+  .card h2 { font-size: 18px; color: #1a365d; margin-bottom: 4px; }
+  .card .sub { color: #718096; font-size: 13px; margin-bottom: 24px; }
+
+  .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #718096; margin: 20px 0 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 14px; font-weight: 600; color: #4a5568; margin-bottom: 6px; }
+  .field .hint { font-size: 12px; color: #a0aec0; margin-top: 4px; }
+  input[type=text], input[type=password] {
+    width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e0; border-radius: 8px;
+    font-size: 15px; color: #2d3748; background: #f7fafc;
+    transition: border-color .15s;
+  }
+  input:focus { outline: none; border-color: #3182ce; background: white; }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .token-row { display: flex; gap: 10px; align-items: flex-start; }
+  .token-row input { flex: 1; }
+  .btn-link { background: #ebf8ff; color: #2b6cb0; border: 1.5px solid #bee3f8; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background .15s; }
+  .btn-link:hover { background: #bee3f8; }
+
+  .btn-save { background: #276749; color: white; padding: 13px 36px; border-radius: 8px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; transition: background .15s; width: 100%; margin-top: 8px; }
+  .btn-save:hover { background: #22543d; }
+
+  .info-box { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #78350f; margin-bottom: 20px; }
+  .info-box strong { display: block; margin-bottom: 4px; }
+
+  footer { text-align: center; color: #a0aec0; font-size: 12px; padding: 24px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">Zoho Billing <span>→</span> GST Portal</div>
+  <div><a href="{{ url_for('dashboard') }}">← Dashboard</a></div>
+</nav>
+
+<div class="page">
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="alert {{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <div class="info-box">
+    <strong>You only need to do this once.</strong>
+    Your credentials are saved on your computer. After saving, you can push invoices every month from the Dashboard.
+  </div>
+
+  <form method="POST">
+
+    <!-- Company info -->
+    <div class="card">
+      <h2>Your Business Details</h2>
+      <p class="sub">Optional — used for display only.</p>
+
+      <div class="row2">
+        <div class="field">
+          <label>Company Name</label>
+          <input type="text" name="company_name" value="{{ cfg.get('company_name','') }}" placeholder="e.g. Thota Enterprises">
+        </div>
+        <div class="field">
+          <label>GSTIN</label>
+          <input type="text" name="gstin" value="{{ cfg.get('gstin','') }}" placeholder="e.g. 29ABCDE1234F1Z5">
+        </div>
+      </div>
+    </div>
+
+    <!-- Zoho credentials -->
+    <div class="card">
+      <h2>Zoho Billing</h2>
+      <p class="sub">Your Zoho API access token — used to fetch your sales invoices.</p>
+
+      <div class="field">
+        <label>Zoho Access Token</label>
+        <div class="token-row">
+          <input type="text" name="zoho_token" id="zohoToken"
+                 value="{{ cfg.get('zoho_token','') }}"
+                 placeholder="Paste your Zoho access token here">
+          <a href="{{ url_for('zoho_authorize') }}" class="btn-link">🔗 Connect Zoho</a>
+        </div>
+        <div class="hint">
+          Get this from <strong>api-console.zoho.com</strong> → Your app → Generate Token.
+          Or click <em>Connect Zoho</em> above to authorize automatically.
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label>Zoho Organization ID <span style="font-weight:400;color:#e53e3e">*Required</span></label>
+        <div class="token-row">
+          <input type="text" name="zoho_org_id" id="zohoOrgId"
+                 value="{{ cfg.get('zoho_org_id','') }}"
+                 placeholder="e.g. 12345678">
+          <a href="{{ url_for('zoho_fetch_org') }}" class="btn-link" title="Auto-detect from Zoho">&#x1F50D; Auto-detect</a>
+        </div>
+        <div class="hint">
+          Click <strong>Auto-detect</strong> after connecting Zoho — it will fill this automatically.
+          This is required for the Zoho Billing API to work.
+        </div>
+      </div>
+
+      <div class="section-title">Advanced (Zoho OAuth — only if using Connect Zoho)</div>
+      <div class="row2">
+        <div class="field">
+          <label>Zoho Client ID</label>
+          <input type="text" name="zoho_client_id" value="{{ cfg.get('zoho_client_id','') }}" placeholder="1000.XXXX...">
+        </div>
+        <div class="field">
+          <label>Zoho Client Secret</label>
+          <input type="password" name="zoho_client_secret" value="{{ cfg.get('zoho_client_secret','') }}" placeholder="••••••••">
+        </div>
+      </div>
+    </div>
+
+    <!-- GST credentials -->
+    <div class="card">
+      <h2>GST Portal</h2>
+      <p class="sub">Your login credentials for the GST Portal (gst.gov.in).</p>
+
+      <div class="row2">
+        <div class="field">
+          <label>GST User ID</label>
+          <input type="text" name="gst_user_id" value="{{ cfg.get('gst_user_id','') }}" placeholder="Your GST portal username" required>
+        </div>
+        <div class="field">
+          <label>GST Password</label>
+          <input type="password" name="gst_password" value="{{ cfg.get('gst_password','') }}" placeholder="••••••••" required>
+        </div>
+      </div>
+
+      <div class="section-title">GST API Credentials (if provided by GST portal / your CA)</div>
+      <div class="row2">
+        <div class="field">
+          <label>GST Client ID <span style="font-weight:400;color:#a0aec0">(optional)</span></label>
+          <input type="text" name="gst_client_id" value="{{ cfg.get('gst_client_id','') }}" placeholder="Optional">
+        </div>
+        <div class="field">
+          <label>GST Client Secret <span style="font-weight:400;color:#a0aec0">(optional)</span></label>
+          <input type="password" name="gst_client_secret" value="{{ cfg.get('gst_client_secret','') }}" placeholder="Optional">
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-save">💾 Save Settings</button>
+  </form>
+</div>
+
+<footer>Settings are saved locally on your computer in <code>settings.json</code>. Never shared externally.</footer>
+
+<script>
+// Keep zoho_client_id and zoho_client_secret in form even if not shown as named fields
+// (they were added as named inputs above)
+</script>
+</body>
+</html>

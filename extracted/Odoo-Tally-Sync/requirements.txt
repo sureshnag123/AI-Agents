@@ -1,0 +1,21 @@
+# Auto-generated requirements for Odoo-Tally Sync Agent
+
+# Odoo XML-RPC (built-in xmlrpc.client, no extra package needed)
+
+# Environment management
+python-dotenv
+
+# HTTP requests (for Tally XML Server + Google Drive PDF download)
+requests
+
+# Scheduling (for automated sync)
+apscheduler
+
+# Excel read/write (for PDF upload agent)
+openpyxl
+
+# PDF to image conversion — no Poppler needed, works on Windows
+PyMuPDF
+
+# Claude Vision API (for invoice OCR)
+anthropic

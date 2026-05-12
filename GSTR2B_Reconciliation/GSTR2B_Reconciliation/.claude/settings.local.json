@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "d:\\Agents_Suresh\\extracted\\GSTR2B_Reconciliation"
+    ],
+    "allow": [
+      "Bash(py reconcile_odoo_gstr2b.py)"
+    ]
+  }
+}

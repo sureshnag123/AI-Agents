@@ -1,0 +1,12 @@
+# Auto-generated requirements for Odoo Payment Reminder Agent
+
+# Odoo XML-RPC (built-in xmlrpc.client, no extra package needed)
+
+# Environment management
+python-dotenv
+
+# Scheduling
+apscheduler
+
+# HTTP requests (utility)
+requests

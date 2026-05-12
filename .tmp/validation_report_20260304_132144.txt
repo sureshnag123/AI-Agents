@@ -1,0 +1,23 @@
+=== Tally Upload Validation Report ===
+Generated: 2026-03-04 13:21:44
+Company: THOTA HOSPITALITY LLP
+
+SUMMARY:
+  Valid entries:   6
+  Errors:          0
+  Warnings:        0
+
+VALID ENTRIES BREAKDOWN:
+  Journal entries:  3
+  Purchase entries: 3
+  Total amount:     ₹6,055.00
+
+VOUCHER DETAILS:
+  Row    Date         Type       Ledger                    Vendor                               Amount
+  ------ ------------ ---------- ------------------------- ------------------------------ ------------
+  2      01-02-2026   Journal    Thota Kitchen             VENDOR for Non GST Purchases   ₹    425.00
+  3      01-02-2026   Journal    Thota Decor               VENDOR for Non GST Purchases   ₹    600.00
+  4      01-02-2026   Journal    Staff Welfare             VENDOR for Non GST Purchases   ₹    540.00
+  5      01-02-2026   Purchase   Thota Kitchen             Meat Shop                      ₹  1,543.00
+  6      01-02-2026   Purchase   Fuel Expenses             Petrol Bunk                    ₹    200.00
+  7      01-02-2026   Purchase   Thota Kitchen             The Big Market                 ₹  2,747.00

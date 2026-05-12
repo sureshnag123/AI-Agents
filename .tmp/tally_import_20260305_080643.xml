@@ -1,0 +1,225 @@
+<ENVELOPE>
+  <HEADER>
+    <TALLYREQUEST>Import Data</TALLYREQUEST>
+  </HEADER>
+  <BODY>
+    <IMPORTDATA>
+      <REQUESTDESC>
+        <REPORTNAME>Vouchers</REPORTNAME>
+        <STATICVARIABLES>
+          <SVCURRENTCOMPANY>THOTA HOSPITALITY LLP</SVCURRENTCOMPANY>
+        </STATICVARIABLES>
+      </REQUESTDESC>
+      <REQUESTDATA>
+        <TALLYMESSAGE xmlns:UDF="TallyUDF">
+
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-001] | Fuel | Dept: Logistics | Paid by: Niveditha</NARRATION>
+          <REFERENCE>FIX-001</REFERENCE>
+          <VOUCHERNUMBER>FIX-001</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Fuel Expenses</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-200</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Petrol Bunk</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>200</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Purchase" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+          <PARTYLEDGERNAME>BLINK COMMERCE PRIVATE LIMITED</PARTYLEDGERNAME>
+          <NARRATION>[FIX-002] | Grocery from blinkit | Dept: Thota kitchen | Paid by: Niveditha</NARRATION>
+          <REFERENCE>MS-4521</REFERENCE>
+          <VOUCHERNUMBER>FIX-002</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-1522</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>BLINK COMMERCE PRIVATE LIMITED</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>1522</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-003] | Sandwich bread mashrooms | Dept: Thota kitchen | Paid by: Niveditha | Note: Anitha vegetable shop</NARRATION>
+          <REFERENCE>FIX-003</REFERENCE>
+          <VOUCHERNUMBER>FIX-003</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-185</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>185</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-004] | Vegetables | Dept: Thota kitchen | Paid by: Niveditha | Note: Anitha vegetable shop</NARRATION>
+          <REFERENCE>FIX-004</REFERENCE>
+          <VOUCHERNUMBER>FIX-004</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-710</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>710</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-005] | Chicken | Dept: Thota kitchen | Paid by: Niveditha</NARRATION>
+          <REFERENCE>FIX-005</REFERENCE>
+          <VOUCHERNUMBER>FIX-005</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Kitchen</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-266</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Meat Shop</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>266</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-006] | Staff Food | Dept: Staff welfare | Paid by: Niveditha | Note: Chandra food stall</NARRATION>
+          <REFERENCE>FIX-006</REFERENCE>
+          <VOUCHERNUMBER>FIX-006</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Staff Welfare</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-330</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>330</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-007] | Pickup Diesel | Dept: Logistics | Paid by: Niveditha | Note: EDC1</NARRATION>
+          <REFERENCE>FIX-007</REFERENCE>
+          <VOUCHERNUMBER>FIX-007</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Fuel Expenses</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-1500</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Petrol Bunk</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>1500</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-008] | Flowers | Dept: Thota decor | Paid by: Niveditha | Note: Suma florist</NARRATION>
+          <REFERENCE>FIX-008</REFERENCE>
+          <VOUCHERNUMBER>FIX-008</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Decor</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-220</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Flower Merchant</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>220</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-009] | Gypsy | Dept: Thota decor | Paid by: Niveditha | Note: Suma florist</NARRATION>
+          <REFERENCE>FIX-009</REFERENCE>
+          <VOUCHERNUMBER>FIX-009</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Thota Decor</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-100</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>100</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-010] | Fuel for raju's Vehical | Dept: Logistics | Paid by: Niveditha</NARRATION>
+          <REFERENCE>FIX-010</REFERENCE>
+          <VOUCHERNUMBER>FIX-010</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Fuel Expenses</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-200</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Petrol Bunk</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>200</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-011] | Staff Vegetable | Dept: Staff welfare | Paid by: Niveditha | Note: Krishna murthy pravision store</NARRATION>
+          <REFERENCE>FIX-011</REFERENCE>
+          <VOUCHERNUMBER>FIX-011</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Staff Welfare</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-820</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>820</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        <VOUCHER VCHTYPE="Journal" ACTION="Create">
+          <DATE>20260301</DATE>
+          <VOUCHERTYPENAME>Journal</VOUCHERTYPENAME>
+          <NARRATION>[FIX-012] | Eggs for staff | Dept: Staff welfare | Paid by: Niveditha | Note: Manoj Chicken centere</NARRATION>
+          <REFERENCE>FIX-012</REFERENCE>
+          <VOUCHERNUMBER>FIX-012</VOUCHERNUMBER>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>Staff Welfare</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>-350</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>VENDOR for Non GST Purchases</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>350</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+        </TALLYMESSAGE>
+      </REQUESTDATA>
+    </IMPORTDATA>
+  </BODY>
+</ENVELOPE>
