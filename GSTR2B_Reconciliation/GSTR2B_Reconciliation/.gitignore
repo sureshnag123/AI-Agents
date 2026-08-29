@@ -1,0 +1,13 @@
+# Real reconciliation output for actual company months — never publish these
+output/
+logs/
+
+# Local Claude Code settings
+.claude/settings.local.json
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc

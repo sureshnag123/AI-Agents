@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+{% if not months %}
+<div class="card">
+    <p class="text-muted">No payroll uploaded yet. <a href="{{ url_for('upload') }}">Upload this month's payroll</a> to get started.</p>
+</div>
+{% else %}
+<div class="card">
+    <h2>Payslips — {{ selected.month_label }}</h2>
+
+    <div class="month-select">
+        <form method="get">
+            <label class="text-muted" style="display:inline;">Month:</label>
+            <select name="month_id" onchange="this.form.submit()">
+                {% for m in months %}
+                <option value="{{ m.id }}" {{ "selected" if m.id == selected.id }}>{{ m.month_label }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <a class="btn" href="{{ url_for('payslip_zip_download', month_id=selected.id) }}">Download All (ZIP)</a>
+    <form method="post" action="{{ url_for('email_all_payslips', month_id=selected.id) }}" style="display:inline;">
+        <button class="btn" type="submit">Send All Payslip Emails</button>
+    </form>
+    <form method="post" action="{{ url_for('delete_month', month_id=selected.id) }}" style="display:inline;"
+          onsubmit="return confirm('Delete {{ selected.month_label }}? This removes its payslips and compliance records from the app and cannot be undone.');">
+        <button class="btn secondary" type="submit" style="color:#B3261E; border-color:#B3261E;">Delete This Month</button>
+    </form>
+
+    {% if unmatched %}
+    <div class="flash warning" style="margin-top:16px;">
+        {{ unmatched|length }} employee(s) had no match in Employee_Details (Employee ID / Bank Name left blank):
+        {{ unmatched|join(", ") }}
+    </div>
+    {% endif %}
+
+    <table class="data" style="margin-top:16px;">
+        <tr><th>Employee</th><th>Designation</th><th>Department</th><th>Net Pay</th><th>Email Status</th><th></th><th></th></tr>
+        {% for row_id, data in rows %}
+        <tr>
+            <td>{{ data.name }} ({{ data.employee_id }})</td>
+            <td>{{ data.designation }}</td>
+            <td>{{ data.department }}</td>
+            <td>&#8377;{{ "{:,.0f}".format(data.net_pay) }}</td>
+            <td>
+                {% set log = email_status.get(row_id) %}
+                {% if log and log.status == 'sent' %}
+                <span class="badge filed">Sent {{ log.sent_at[:10] }}</span>
+                {% elif log and log.status == 'failed' %}
+                <span class="badge overdue" title="{{ log.error }}">Failed</span>
+                {% elif not data.email %}
+                <span class="badge pending">No email on file</span>
+                {% else %}
+                <span class="badge pending">Not sent</span>
+                {% endif %}
+            </td>
+            <td><a class="btn secondary" href="{{ url_for('payslip_pdf_download', month_id=selected.id, row_id=row_id) }}">Download PDF</a></td>
+            <td>
+                <form method="post" action="{{ url_for('email_one_payslip', month_id=selected.id, row_id=row_id) }}">
+                    <button class="btn secondary" type="submit" {{ "disabled" if not data.email }}>
+                        {{ "Resend" if log and log.status == 'sent' else "Send" }}
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+{% endblock %}

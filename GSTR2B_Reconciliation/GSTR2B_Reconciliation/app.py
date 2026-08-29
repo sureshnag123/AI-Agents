@@ -4,6 +4,7 @@ GSTR2B Reconciliation Agent - Streamlit UI
 Launch with:
     streamlit run app.py
 """
+import os
 import sys
 import logging
 import tempfile
@@ -45,6 +46,30 @@ st.set_page_config(
     page_icon="\U0001f9fe",
     layout="wide",
 )
+
+# ---------------------------------------------------------------------------
+# Simple password gate — set APP_PASSWORD as an environment variable / secret
+# on the host. Everyone on the team uses this one shared password.
+# ---------------------------------------------------------------------------
+_app_password = os.environ.get("APP_PASSWORD")
+
+if _app_password and not st.session_state.get("authenticated"):
+    st.title("\U0001f9fe GSTR2B Reconciliation Agent")
+    entered = st.text_input("Password", type="password")
+    if st.button("Log in") or entered:
+        if entered == _app_password:
+            st.session_state["authenticated"] = True
+            st.rerun()
+        elif entered:
+            st.error("Incorrect password.")
+    if not st.session_state.get("authenticated"):
+        st.stop()
+elif not _app_password:
+    st.error(
+        "APP_PASSWORD is not set on this server, so this app is unprotected. "
+        "Set the APP_PASSWORD environment variable/secret before sharing this link."
+    )
+    st.stop()
 
 # ---------------------------------------------------------------------------
 # Custom CSS

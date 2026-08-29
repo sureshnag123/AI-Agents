@@ -1,0 +1,56 @@
+# Environment variables and secrets — never commit these
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+!*/.env.example
+
+# Any local settings/credentials files that hold live API keys or tokens
+**/zoho_gst_portal/settings.json
+**/GSTR2B_Reconciliation/settings.json
+credentials.json
+token.json
+service_account*.json
+
+# GSTR2B_Reconciliation outer folder = Suresh's real ad-hoc working files
+# (live Odoo key, real GSTINs/invoices). Only the packaged app inside
+# GSTR2B_Reconciliation/GSTR2B_Reconciliation/ is meant to be shared/deployed.
+GSTR2B_Reconciliation/*.xlsx
+GSTR2B_Reconciliation/*.json
+GSTR2B_Reconciliation/*.txt
+GSTR2B_Reconciliation/*.py
+GSTR2B_Reconciliation/core_engine/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Node
+node_modules/
+
+# Temporary / working files
+.tmp/
+*.tmp
+*.temp
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
