@@ -13,6 +13,10 @@ credentials.json
 token.json
 service_account*.json
 
+# Fracktal-Works-HR now lives in its own repo (github.com/sureshnag123/Fracktal-HR-Ops)
+# with its own nested .git — keep it out of this repo entirely.
+Fracktal-Works-HR/
+
 # GSTR2B_Reconciliation outer folder = Suresh's real ad-hoc working files
 # (live Odoo key, real GSTINs/invoices). Only the packaged app inside
 # GSTR2B_Reconciliation/GSTR2B_Reconciliation/ is meant to be shared/deployed.
